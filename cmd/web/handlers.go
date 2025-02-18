@@ -11,7 +11,7 @@ import (
 )
 
 func (app *application) getHome(w http.ResponseWriter, r *http.Request) {
-	recipies, err := app.recipies.List()
+	recipies, err := app.recipies.RandomList(10)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -152,7 +152,15 @@ func (app *application) postLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.sessionManager.Put(r.Context(), "authenticatedUserID", id)
+	user, err := app.users.Get(id)
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	app.sessionManager.Put(r.Context(), userIdSessionKey, id)
+	app.sessionManager.Put(r.Context(), userNameSessionKey, user.Name)
 
 	app.SetFlashMsg(r, MsgUserAuthenticeted)
 	http.Redirect(w, r, "/recipies/create", http.StatusSeeOther)

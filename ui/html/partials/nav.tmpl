@@ -12,6 +12,9 @@
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
       <button type="submit" class="btn btn-link">Logout</button>
     </form>
+    <a href="/usr/profile">
+      <figure class="avatar mr-2" data-initial="{{ avatarName .UserName }}"></figure>
+    </a>
     {{ else }}
     <a href="/auth/signup" class="btn btn-link">Sign Up</a>
     <a href="/auth/login" class="btn btn-link">Login</a>

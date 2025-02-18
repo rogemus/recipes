@@ -18,11 +18,42 @@ type Recipe struct {
 type RecipeModelInf interface {
 	Get(id int) (Recipe, error)
 	List() ([]Recipe, error)
+	RandomList(limit int) ([]Recipe, error)
 	Insert(title, description, instructions string, userId int) (int, error)
 }
 
 type RecipeModel struct {
 	DB *sql.DB
+}
+
+func (r *RecipeModel) RandomList(limit int) ([]Recipe, error) {
+	stmt := `SELECT id, title, description, instructions, created FROM recipies ORDER BY RANDOM() LIMIT ?`
+
+	rows, err := r.DB.Query(stmt, limit)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var recipies = make([]Recipe, 0)
+
+	for rows.Next() {
+		var r Recipe
+		err = rows.Scan(&r.ID, &r.Title, &r.Description, &r.Instructions, &r.Created)
+
+		if err != nil {
+			return nil, err
+		}
+
+		recipies = append(recipies, r)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return recipies, nil
 }
 
 func (r *RecipeModel) Get(id int) (Recipe, error) {

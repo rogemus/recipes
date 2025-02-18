@@ -59,7 +59,11 @@ func (app *application) isAuthenticated(r *http.Request) bool {
 }
 
 func (app *application) sessionUserId(r *http.Request) int {
-	id := app.sessionManager.GetInt(r.Context(), userIsSessionKey)
-
+	id := app.sessionManager.GetInt(r.Context(), userIdSessionKey)
 	return id
+}
+
+func (app *application) sessionUserName(r *http.Request) string {
+	name := app.sessionManager.GetString(r.Context(), userNameSessionKey)
+	return name
 }
