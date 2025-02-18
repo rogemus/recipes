@@ -47,3 +47,19 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, status in
 	w.WriteHeader(status)
 	buf.WriteTo(w)
 }
+
+func (app *application) isAuthenticated(r *http.Request) bool {
+	isAuthenticated, ok := r.Context().Value(isAuthenticatedContextKey).(bool)
+
+	if !ok {
+		return false
+	}
+
+	return isAuthenticated
+}
+
+func (app *application) sessionUserId(r *http.Request) int {
+	id := app.sessionManager.GetInt(r.Context(), userIsSessionKey)
+
+	return id
+}

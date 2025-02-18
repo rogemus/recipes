@@ -8,7 +8,9 @@
   </section>
   <section class="navbar-section">
     {{if .IsAuthenticated}}
-    <a href="/auth/logout" class="btn btn-link">Logout</a>
+    <form action="/auth/logout" method="post">
+      <button type="submit" class="btn btn-link">Logout</button>
+    </form>
     {{ else }}
     <a href="/auth/signup" class="btn btn-link">Sign Up</a>
     <a href="/auth/login" class="btn btn-link">Login</a>

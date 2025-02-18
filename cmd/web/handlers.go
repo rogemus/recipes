@@ -60,6 +60,10 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	userId := app.sessionUserId(r)
+  
+	app.logger.Info("auth user", "userId", userId)
+
 	form := recipieCreateForm{
 		Title:        r.PostForm.Get("title"),
 		Description:  r.PostForm.Get("description"),

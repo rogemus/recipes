@@ -10,7 +10,7 @@ import (
 func (app *application) routes() http.Handler {
 	mux := http.NewServeMux()
 
-	dynamic := alice.New(app.sessionManager.LoadAndSave, noSurf)
+	dynamic := alice.New(app.sessionManager.LoadAndSave, noSurf, app.authenticate)
 	standard := alice.New(app.logRequest, commonHeader)
 	protected := dynamic.Append(app.requireAuth)
 
