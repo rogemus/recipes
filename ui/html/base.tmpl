@@ -1,0 +1,42 @@
+{{ define "base" }}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ template "title" . }}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <link rel="stylesheet" href="/static/css/main.css" />
+  <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="columns">
+      <div class="p-2 mt-2 p-centered column col-md-12 col-6">
+        {{ template "nav" . }}
+      </div>
+    </div>
+
+
+    {{ with .Flash }}
+    <div class="columns">
+      <div class="p-2 mt-2 p-centered column col-md-12 col-6">
+        <div class="toast toast-success">
+          {{ . }}
+        </div>
+      </div>
+    </div>
+    {{ end }}
+
+    <div class="columns">
+      <main class="p-2 mt-2 p-centered column col-md-12 col-6">
+        {{ template "main" .}}
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+{{ end }}

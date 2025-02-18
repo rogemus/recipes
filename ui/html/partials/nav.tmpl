@@ -1,0 +1,18 @@
+{{ define "nav" }}
+<header class="navbar p-2 mb-2">
+  <section class="navbar-section">
+    <a href="/" class="navbar-brand mr-2">🍕 HOME</a>
+    {{if .IsAuthenticated}}
+    <a href="/recipies/create" class="btn btn-link">Create Recipe</a>
+    {{end}}
+  </section>
+  <section class="navbar-section">
+    {{if .IsAuthenticated}}
+    <a href="/auth/logout" class="btn btn-link">Logout</a>
+    {{ else }}
+    <a href="/auth/signup" class="btn btn-link">Sign Up</a>
+    <a href="/auth/login" class="btn btn-link">Login</a>
+    {{ end }}
+  </section>
+</header>
+{{ end }}

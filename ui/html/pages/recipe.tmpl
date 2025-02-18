@@ -1,0 +1,15 @@
+{{ define "title" }}Recipies - {{ .Recipe.Title }}{{end}}
+
+{{ define "main" }}
+
+<h1>{{ .Recipe.Title }}</h1>
+
+<p>
+  {{ .Recipe.Description }}
+</p>
+
+<p>
+  {{ .Recipe.Instructions }}
+</p>
+
+{{ end }}

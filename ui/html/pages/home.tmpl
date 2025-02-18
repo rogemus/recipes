@@ -1,0 +1,14 @@
+{{ define "title" }}Recipies{{end}}
+
+{{ define "main" }}
+
+<h1>Recipies</h1>
+
+<div class="columns">
+  {{ range .Recipies }}
+  <div class="column col-6 col-xs-12 mb-2">
+    {{ template "recipeListItem" . }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

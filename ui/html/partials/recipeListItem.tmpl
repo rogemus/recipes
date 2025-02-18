@@ -1,0 +1,13 @@
+{{ define "recipeListItem" }}
+
+<div class="card">
+  <div class="card-header">
+    <a href="/recipies/{{ .ID }}" class="card-title h5">{{ .Title }}</a>
+    <div class="card-subtitle text-gray">{{ .Created }}</div>
+  </div>
+  <div class="card-body">
+    {{ .Description }}
+  </div>
+</div>
+
+{{ end }}
