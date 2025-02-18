@@ -2,13 +2,14 @@
 <header class="navbar p-2 mb-2">
   <section class="navbar-section">
     <a href="/" class="navbar-brand mr-2">🍕 HOME</a>
-    {{if .IsAuthenticated}}
+    {{ if .IsAuthenticated }}
     <a href="/recipies/create" class="btn btn-link">Create Recipe</a>
-    {{end}}
+    {{ end }}
   </section>
   <section class="navbar-section">
-    {{if .IsAuthenticated}}
+    {{ if .IsAuthenticated }}
     <form action="/auth/logout" method="post">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
       <button type="submit" class="btn btn-link">Logout</button>
     </form>
     {{ else }}

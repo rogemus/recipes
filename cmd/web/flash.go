@@ -8,6 +8,8 @@ const MsgUserCreated = "User successfully created!!! Please login using your cre
 
 const MsgUserAuthenticeted = "Login successfully"
 
+const MsgLogout = "Logout successfully"
+
 func (app *application) SetFlashMsg(r *http.Request, msg string) {
 	app.sessionManager.Put(r.Context(), "flash", msg)
 }

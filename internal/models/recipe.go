@@ -12,12 +12,13 @@ type Recipe struct {
 	Created      time.Time
 	Description  string
 	Instructions string
+	UserId       int
 }
 
 type RecipeModelInf interface {
 	Get(id int) (Recipe, error)
 	List() ([]Recipe, error)
-	Insert(title, description, instructions string) (int, error)
+	Insert(title, description, instructions string, userId int) (int, error)
 }
 
 type RecipeModel struct {
@@ -72,9 +73,9 @@ func (r *RecipeModel) List() ([]Recipe, error) {
 	return recipies, nil
 }
 
-func (r *RecipeModel) Insert(title, description, instructions string) (int, error) {
-	stmt := `INSERT INTO recipies (title, description, instructions) VALUES(?, ?, ?)`
-	result, err := r.DB.Exec(stmt, title, description, instructions)
+func (r *RecipeModel) Insert(title, description, instructions string, userId int) (int, error) {
+	stmt := `INSERT INTO recipies (title, description, instructions, user_id) VALUES(?, ?, ?, ?)`
+	result, err := r.DB.Exec(stmt, title, description, instructions, userId)
 
 	if err != nil {
 		return 0, err

@@ -60,10 +60,6 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	userId := app.sessionUserId(r)
-  
-	app.logger.Info("auth user", "userId", userId)
-
 	form := recipieCreateForm{
 		Title:        r.PostForm.Get("title"),
 		Description:  r.PostForm.Get("description"),
@@ -81,7 +77,8 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	id, err := app.recipies.Insert(form.Title, form.Description, form.Instructions)
+	userId := app.sessionUserId(r)
+	id, err := app.recipies.Insert(form.Title, form.Description, form.Instructions, userId)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -216,36 +213,14 @@ func (app *application) getSignup(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) postLogout(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-
-	form := loginForm{
-		Email:    r.PostForm.Get("email"),
-		Password: r.PostForm.Get("password"),
-	}
-
-	form.CheckField(validator.NotBlank(form.Email), "email", validator.FieldErr.ErrNotBlank())
-	form.CheckField(validator.Matches(form.Email, validator.EmailRX), "email", validator.FieldErr.ErrNotEmail())
-	form.CheckField(validator.NotBlank(form.Password), "password", validator.FieldErr.ErrNotBlank())
-	form.CheckField(validator.MinChars(form.Password, 8), "password", validator.FieldErr.ErrMinLength(8))
-
-	if !form.IsValid() {
-		data := app.newTemplateData(r)
-		data.Form = form
-		app.render(w, r, http.StatusUnprocessableEntity, "login.tmpl", data)
-		return
-	}
-
-	_, err = app.users.Authenticate(form.Email, form.Password)
+	err := app.sessionManager.RenewToken(r.Context())
 
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	app.SetFlashMsg(r, MsgUserAuthenticeted)
+	app.sessionManager.Remove(r.Context(), "authenticatedUserID")
+	app.SetFlashMsg(r, MsgLogout)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
