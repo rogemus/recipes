@@ -1,1 +1,1 @@
-DROP TABLE recipies
+DROP TABLE recipies;
