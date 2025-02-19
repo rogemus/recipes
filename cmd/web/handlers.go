@@ -232,3 +232,18 @@ func (app *application) postLogout(w http.ResponseWriter, r *http.Request) {
 	app.SetFlashMsg(r, MsgLogout)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+func (app *application) getUsrProfile(w http.ResponseWriter, r *http.Request) {
+	userId := app.sessionUserId(r)
+
+	user, err := app.users.Get(userId)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.User = user
+
+	app.render(w, r, http.StatusOK, "usrProfile.tmpl", data)
+}

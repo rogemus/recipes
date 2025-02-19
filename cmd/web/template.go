@@ -16,6 +16,7 @@ import (
 type templateData struct {
 	CurrentYear     int
 	Recipe          models.Recipe
+	User            models.User
 	Recipies        []models.Recipe
 	Form            any
 	Flash           string

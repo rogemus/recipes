@@ -31,7 +31,7 @@ func main() {
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	db, err := dbConnect(*dbPath)
+	db, err := NewDb(*dbPath)
 
 	if err != nil {
 		logger.Error(err.Error())
