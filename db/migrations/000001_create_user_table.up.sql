@@ -1,0 +1,8 @@
+CREATE TABLE
+  users (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    hashed_password CHAR(60) NOT NULL,
+    created DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
