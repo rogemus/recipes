@@ -1,4 +1,4 @@
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
   sessions (
     token CHAR(43) PRIMARY KEY,
     data BLOB NOT NULL,
