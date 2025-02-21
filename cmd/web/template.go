@@ -18,6 +18,9 @@ type templateData struct {
 	Recipe          models.Recipe
 	User            models.User
 	Recipies        []models.Recipe
+	Ingredients     []models.Ingredient
+	Units           []models.Unit
+	IngredientList  []models.IngredientsListItem
 	Form            any
 	Flash           string
 	IsAuthenticated bool

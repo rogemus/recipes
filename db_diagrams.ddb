@@ -1,13 +1,13 @@
 {
   "author": "Unnamed",
   "title": "Recipies DB",
-  "date": "2025-02-20T09:17:50.150Z",
+  "date": "2025-02-20T13:32:35.892Z",
   "tables": [
     {
       "id": 0,
-      "name": "utils",
-      "x": 376.58203125,
-      "y": -35.87890625,
+      "name": "units",
+      "x": 678.0640312500002,
+      "y": -463.30915625000006,
       "fields": [
         {
           "name": "id",
@@ -57,8 +57,8 @@
     {
       "id": 1,
       "name": "ingredients",
-      "x": 378.5234375,
-      "y": -238.91406249999994,
+      "x": 677.9871874999999,
+      "y": -806.9670624999999,
       "fields": [
         {
           "name": "id",
@@ -108,8 +108,8 @@
     {
       "id": 2,
       "name": "recipies",
-      "x": -674.3359375,
-      "y": -700.14453125,
+      "x": -778.6571875000001,
+      "y": -689.0812812500001,
       "fields": [
         {
           "name": "id",
@@ -177,34 +177,6 @@
           "id": 4,
           "size": "",
           "values": []
-        },
-        {
-          "name": "igredient_list_id",
-          "type": "INTEGER",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 5,
-          "size": "",
-          "values": []
-        },
-        {
-          "name": "instructions_list_id",
-          "type": "INTEGER",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 6,
-          "size": "",
-          "values": []
         }
       ],
       "comment": "",
@@ -215,8 +187,8 @@
     {
       "id": 3,
       "name": "users",
-      "x": 381.26953125,
-      "y": -551.0625,
+      "x": -119.59396874999925,
+      "y": -546.11475,
       "fields": [
         {
           "name": "id",
@@ -292,8 +264,8 @@
     {
       "id": 4,
       "name": "ingredients_list",
-      "x": -294.54296875000006,
-      "y": -269.07421875000006,
+      "x": -120.51446875000005,
+      "y": -832.3212187500002,
       "fields": [
         {
           "name": "id",
@@ -346,6 +318,20 @@
           "increment": false,
           "comment": "",
           "id": 3
+        },
+        {
+          "name": "recipe_id",
+          "type": "INTEGER",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 4,
+          "size": "",
+          "values": []
         }
       ],
       "comment": "",
@@ -356,8 +342,8 @@
     {
       "id": 5,
       "name": "instructions",
-      "x": 376.6171874999999,
-      "y": 207.28515625000006,
+      "x": -94.42668749999996,
+      "y": -120.22118749999993,
       "fields": [
         {
           "name": "id",
@@ -421,8 +407,8 @@
     {
       "id": 6,
       "name": "instructions_list",
-      "x": -640.60546875,
-      "y": 142.98046875,
+      "x": -981.8922187499999,
+      "y": -197.96878124999978,
       "fields": [
         {
           "name": "id",
@@ -469,6 +455,59 @@
       "indices": [],
       "color": "#175e7a",
       "key": 1740042683689
+    },
+    {
+      "id": 7,
+      "name": "sessions",
+      "x": -771.0060312500003,
+      "y": -934.9990937499998,
+      "fields": [
+        {
+          "name": "token",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 0,
+          "size": 43
+        },
+        {
+          "name": "data",
+          "type": "BLOB",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 1,
+          "size": "",
+          "values": []
+        },
+        {
+          "name": "expiry",
+          "type": "TIMESTAMP",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 2,
+          "size": "",
+          "values": []
+        }
+      ],
+      "comment": "",
+      "indices": [],
+      "color": "#175e7a",
+      "key": 1740043204175
     }
   ],
   "relationships": [
@@ -488,7 +527,7 @@
       "startFieldId": 2,
       "endTableId": 0,
       "endFieldId": 0,
-      "cardinality": "one_to_many",
+      "cardinality": "one_to_one",
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_ingredients_list_unit_id_utils",
@@ -499,22 +538,11 @@
       "startFieldId": 1,
       "endTableId": 1,
       "endFieldId": 0,
-      "cardinality": "one_to_many",
+      "cardinality": "one_to_one",
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_ingredients_list_igredient_id_ingredients",
       "id": 2
-    },
-    {
-      "startTableId": 2,
-      "startFieldId": 5,
-      "endTableId": 4,
-      "endFieldId": 0,
-      "cardinality": "one_to_one",
-      "updateConstraint": "No action",
-      "deleteConstraint": "Cascade",
-      "name": "fk_recipies_igredient_list_id_ingredients_list",
-      "id": 3
     },
     {
       "startTableId": 6,
@@ -525,17 +553,28 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_instructions_list_instruction_id_instructions",
+      "id": 3
+    },
+    {
+      "startTableId": 2,
+      "startFieldId": 0,
+      "endTableId": 4,
+      "endFieldId": 4,
+      "cardinality": "one_to_many",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "fk_recipies_id_ingredients_list",
       "id": 4
     },
     {
       "startTableId": 2,
-      "startFieldId": 6,
+      "startFieldId": 0,
       "endTableId": 6,
-      "endFieldId": 0,
-      "cardinality": "one_to_one",
+      "endFieldId": 1,
+      "cardinality": "one_to_many",
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
-      "name": "fk_recipies_instructions_list_id_instructions_list",
+      "name": "fk_recipies_id_instructions_list",
       "id": 5
     }
   ],

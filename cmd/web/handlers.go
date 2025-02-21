@@ -40,16 +40,22 @@ func (app *application) getRecipe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ingredientsList, err := app.ingredientsList.List(id)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
 	data := app.newTemplateData(r)
 	data.Recipe = recipe
+	data.IngredientList = ingredientsList
 
 	app.render(w, r, http.StatusOK, "recipe.tmpl", data)
 }
 
 type recipieCreateForm struct {
-	Title        string
-	Description  string
-	Instructions string
+	Title       string
+	Description string
 	validator.Validator
 }
 
@@ -61,14 +67,12 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 	}
 
 	form := recipieCreateForm{
-		Title:        r.PostForm.Get("title"),
-		Description:  r.PostForm.Get("description"),
-		Instructions: r.PostForm.Get("instructions"),
+		Title:       r.PostForm.Get("title"),
+		Description: r.PostForm.Get("description"),
 	}
 
 	form.CheckField(validator.NotBlank(form.Title), "title", validator.FieldErr.ErrNotBlank())
 	form.CheckField(validator.NotBlank(form.Description), "description", validator.FieldErr.ErrNotBlank())
-	form.CheckField(validator.NotBlank(form.Instructions), "instructions", validator.FieldErr.ErrNotBlank())
 
 	if !form.IsValid() {
 		data := app.newTemplateData(r)
@@ -78,7 +82,13 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 	}
 
 	userId := app.sessionUserId(r)
-	id, err := app.recipies.Insert(form.Title, form.Description, form.Instructions, userId)
+	id, err := app.recipies.Insert(form.Title, form.Description, userId)
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+	err = app.ingredientsList.Insert([]int{12}, []int{1}, id, 1.0)
 
 	if err != nil {
 		app.serverError(w, r, err)

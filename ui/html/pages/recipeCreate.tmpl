@@ -22,15 +22,6 @@
     {{ end }}
   </div>
 
-  <div class="form-group {{ with .Form.FieldErrors.instructions }} has-error {{ end }}">
-    <label class="form-label" for="instructions">Instructions</label>
-    <textarea class="form-input" id="instructions" name="instructions" placeholder="Instructions..."
-      rows="7"></textarea>
-    {{ with .Form.FieldErrors.instructions }}
-    {{ range . }}<div class="form-input-hint">{{ . }}</div> {{ end }}
-    {{ end }}
-  </div>
-
   <button type="submit" class="btn btn-primary">Create</button>
 </form>
 {{ end }}

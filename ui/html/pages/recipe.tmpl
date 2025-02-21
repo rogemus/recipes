@@ -9,7 +9,9 @@
 </p>
 
 <p>
-  {{ .Recipe.Instructions }}
+  {{ range .IngredientList }}
+  {{ .IngredientName }} {{ .Amount }} {{ .UnitName }}
+  {{ end }}
 </p>
 
 {{ end }}

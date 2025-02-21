@@ -15,12 +15,15 @@ import (
 )
 
 type application struct {
-	logger         *slog.Logger
-	debugMode      bool
-	recipies       models.RecipeModelInf
-	users          models.UserModelInf
-	tmplCache      map[string]*template.Template
-	sessionManager *scs.SessionManager
+	logger          *slog.Logger
+	debugMode       bool
+	recipies        models.RecipeModelInf
+	users           models.UserModelInf
+	tmplCache       map[string]*template.Template
+	sessionManager  *scs.SessionManager
+	ingredientsList models.IngredientsListModelInf
+	ingredients     models.IngredientModelInf
+	units           models.UnitModelInf
 }
 
 func main() {
@@ -50,12 +53,15 @@ func main() {
 	sessionManager.Lifetime = 12 * time.Hour
 
 	app := application{
-		logger:         logger,
-		debugMode:      *debug,
-		recipies:       &models.RecipeModel{DB: db},
-		users:          &models.UserModel{DB: db},
-		tmplCache:      tmplCache,
-		sessionManager: sessionManager,
+		logger:          logger,
+		debugMode:       *debug,
+		tmplCache:       tmplCache,
+		sessionManager:  sessionManager,
+		recipies:        &models.RecipeModel{DB: db},
+		users:           &models.UserModel{DB: db},
+		units:           &models.UnitModel{DB: db},
+		ingredientsList: &models.IngredientsListModel{DB: db},
+		ingredients:     &models.IngredientModel{DB: db},
 	}
 
 	srv := &http.Server{
