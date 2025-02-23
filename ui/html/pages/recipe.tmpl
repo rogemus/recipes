@@ -8,10 +8,10 @@
   {{ .Recipe.Description }}
 </p>
 
+{{ range .IngredientList }}
 <p>
-  {{ range .IngredientList }}
   {{ .IngredientName }} {{ .Amount }} {{ .UnitName }}
-  {{ end }}
 </p>
+{{ end }}
 
 {{ end }}

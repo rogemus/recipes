@@ -2,6 +2,8 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 )
 
 type IngredientsListItem struct {
@@ -19,14 +21,14 @@ type IngredientsListModel struct {
 
 type IngredientsListModelInf interface {
 	List(recipeId int) ([]IngredientsListItem, error)
-	Insert(ingredient_ids, unit_ids []int, recipe_id int, amout float32) error
+	Insert(ingredient_ids, unit_ids, amounts []string, recipe_id int) error
 }
 
 func (m *IngredientsListModel) List(recipeId int) ([]IngredientsListItem, error) {
 	stmt := `SELECT
     ingredients.id,
     ingredients.name,
-    amout,
+    amount,
     units.id,
     units.name,
     recipe_id
@@ -62,14 +64,20 @@ func (m *IngredientsListModel) List(recipeId int) ([]IngredientsListItem, error)
 	return ingredientsList, nil
 }
 
-func (m *IngredientsListModel) Insert(ingredient_ids, unit_ids []int, recipe_id int, amout float32) error {
-	// TODO add multiple
-	ingredient_id := ingredient_ids[0]
-	unit_id := unit_ids[0]
+func (m *IngredientsListModel) Insert(ingredient_ids, unit_ids, amounts []string, recipe_id int) error {
+	values := make([]string, 0)
 
-	stmt := "INSERT INTO ingredients_list (ingredient_id, unit_id, recipe_id, amout) VALUES (?, ?, ?, ?);"
+	for i, _ := range ingredient_ids {
+		unit := unit_ids[i]
+		ingredient := ingredient_ids[i]
+		amount := amounts[i]
+		value := fmt.Sprintf("(%s, %s, %s, %d)", ingredient, unit, amount, recipe_id)
+		values = append(values, value)
+	}
 
-	_, err := m.DB.Exec(stmt, ingredient_id, unit_id, recipe_id, amout)
+	valuesStr := strings.Join(values[:], ",")
+	stmt := fmt.Sprintf("INSERT INTO ingredients_list (ingredient_id, unit_id, amount, recipe_id) VALUES %s", valuesStr)
+	_, err := m.DB.Exec(stmt)
 
 	if err != nil {
 		return err

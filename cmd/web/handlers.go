@@ -56,10 +56,14 @@ func (app *application) getRecipe(w http.ResponseWriter, r *http.Request) {
 type recipieCreateForm struct {
 	Title       string
 	Description string
+	Ingredients []string
+	Units       []string
+	Amount      []string
 	validator.Validator
 }
 
 func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
@@ -69,14 +73,44 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 	form := recipieCreateForm{
 		Title:       r.PostForm.Get("title"),
 		Description: r.PostForm.Get("description"),
+		Units:       r.PostForm["unit_id"],
+		Amount:      r.PostForm["amount"],
+		Ingredients: r.PostForm["ingredient_id"],
 	}
 
 	form.CheckField(validator.NotBlank(form.Title), "title", validator.FieldErr.ErrNotBlank())
 	form.CheckField(validator.NotBlank(form.Description), "description", validator.FieldErr.ErrNotBlank())
 
+	for i, _ := range form.Ingredients {
+		unit := form.Units[i]
+		ingredient := form.Ingredients[i]
+		amount := form.Amount[i]
+
+		index := fmt.Sprintf("i-%d", i)
+		form.CheckField(validator.NotBlank(amount), index, validator.FieldErr.ErrNotBlank())
+		form.CheckField(validator.NotBlank(ingredient), index, validator.FieldErr.ErrNotBlank())
+		form.CheckField(validator.NotBlank(unit), index, validator.FieldErr.ErrNotBlank())
+	}
+
 	if !form.IsValid() {
 		data := app.newTemplateData(r)
+
+		ingredients, err := app.ingredients.List()
+		if err != nil {
+			app.serverError(w, r, err)
+			return
+		}
+
+		units, err := app.units.List()
+		if err != nil {
+			app.serverError(w, r, err)
+			return
+		}
+
+		data.Ingredients = ingredients
+		data.Units = units
 		data.Form = form
+
 		app.render(w, r, http.StatusUnprocessableEntity, "recipeCreate.tmpl", data)
 		return
 	}
@@ -88,7 +122,8 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 		app.serverError(w, r, err)
 		return
 	}
-	err = app.ingredientsList.Insert([]int{12}, []int{1}, id, 1.0)
+
+	err = app.ingredientsList.Insert(form.Ingredients, form.Units, form.Amount, id)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -102,8 +137,23 @@ func (app *application) postRecipesCreate(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) getRecipiesCreate(w http.ResponseWriter, r *http.Request) {
+	units, err := app.units.List()
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	ingredients, err := app.ingredients.List()
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
 	data := app.newTemplateData(r)
 	data.Form = recipieCreateForm{}
+
+	data.Units = units
+	data.Ingredients = ingredients
+
 	app.render(w, r, http.StatusOK, "recipeCreate.tmpl", data)
 }
 

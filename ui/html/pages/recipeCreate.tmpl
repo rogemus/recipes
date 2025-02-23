@@ -22,6 +22,59 @@
     {{ end }}
   </div>
 
+  <ul x-data="ingredients_list">
+    <template x-for="index in ingredients">
+      <div :id="`ind-${index}`">
+        <div class="form-group">
+          <label class="form-label" :for="`ingredient-${index}`">Ingredient</label>
+          <div class="form-group">
+            <select class="form-select" :id="`ingredient-${index}`" name="ingredient_id">
+              {{ range .Ingredients }}
+              <option value="{{ .ID }}">{{ .Name }}</option>
+              {{ end }}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" :for="`amount-${index}`">Amout</label>
+          <input class="form-input" :id="`amount-${index}`" name="amount" type="text" placeholder="Amout">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" :for="`unit-${index}`">Unit</label>
+          <div class="form-group">
+            <select class="form-select" :id="`unit-${index}`" name="unit_id">
+              {{ range .Units }}
+              <option value="{{ .ID }}">{{ .Name }}</option>
+              {{ end }}
+            </select>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <button type="button" @click="onRemoveClick(index)" class="btn">Remove</button>
+      </div>
+    </template>
+    <button class="btn btn-primary" x-on:click="onNewClick" type="button">Add
+      Ingredient</button>
+  </ul>
+
+  <script nonce="tw5bsz59ychjgg5ndo3r">
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('ingredients_list', () => ({
+        ingredients: [0],
+        onRemoveClick(id) {
+          const ingredients = [...this.ingredients]
+          const index = ingredients.indexOf(id);
+          ingredients.splice(index, 1)
+          this.ingredients = ingredients;
+        },
+        onNewClick() {
+          this.ingredients.push(this.ingredients.length)
+        }
+      }))
+    });
+  </script>
   <button type="submit" class="btn btn-primary">Create</button>
 </form>
 {{ end }}

@@ -18,6 +18,7 @@ type IngredientModel struct {
 type IngredientModelInf interface {
 	Insert(name string) error
 	Search(query string) ([]Ingredient, error)
+	List() ([]Ingredient, error)
 }
 
 func (m *IngredientModel) Insert(name string) error {
@@ -35,4 +36,28 @@ func (m *IngredientModel) Insert(name string) error {
 func (m *IngredientModel) Search(query string) ([]Ingredient, error) {
 	// TODO
 	return nil, nil
+}
+
+func (m *IngredientModel) List() ([]Ingredient, error) {
+	stmt := `SELECT id, name FROM ingredients`
+
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	ingredients := make([]Ingredient, 0)
+
+	for rows.Next() {
+		var i Ingredient
+
+		err = rows.Scan(&i.ID, &i.Name)
+		if err != nil {
+			return nil, err
+		}
+		ingredients = append(ingredients, i)
+	}
+
+	return ingredients, nil
 }

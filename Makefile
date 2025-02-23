@@ -6,7 +6,7 @@ test:
 
 dev:
 	@echo "Starting dev server ..."
-	go run ./cmd/web/ -debug
+	air
 
 start:
 	@echo "Starting prod server ..."
