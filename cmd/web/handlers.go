@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"recipies.krogowski.dev/internal/models"
+	"recipies.krogowski.dev/internal/consts"
 	"recipies.krogowski.dev/internal/validator"
 )
 
@@ -194,7 +194,7 @@ func (app *application) postLogin(w http.ResponseWriter, r *http.Request) {
 	id, err := app.users.Authenticate(form.Email, form.Password)
 
 	if err != nil {
-		if errors.Is(err, models.ErrInvalidCredentials) {
+		if errors.Is(err, consts.ErrInvalidCredentials) {
 			form.AddFormError(validator.FormErros.ErrInvalidCredentials())
 			data := app.newTemplateData(r)
 			data.Form = form

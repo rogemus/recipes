@@ -11,19 +11,19 @@ import (
 
 	"github.com/alexedwards/scs/sqlite3store"
 	"github.com/alexedwards/scs/v2"
-	"recipies.krogowski.dev/internal/models"
+	"recipies.krogowski.dev/internal/repository"
 )
 
 type application struct {
 	logger          *slog.Logger
 	debugMode       bool
-	recipies        models.RecipeModelInf
-	users           models.UserModelInf
 	tmplCache       map[string]*template.Template
 	sessionManager  *scs.SessionManager
-	ingredientsList models.IngredientsListModelInf
-	ingredients     models.IngredientModelInf
-	units           models.UnitModelInf
+	recipies        repository.RecipeRepository
+	users           repository.UserRepository
+	ingredientsList repository.IngredientsListRepository
+	ingredients     repository.IngredientRepository
+	units           repository.UnitRepository
 }
 
 func main() {
@@ -52,16 +52,22 @@ func main() {
 	sessionManager.Store = sqlite3store.New(db)
 	sessionManager.Lifetime = 12 * time.Hour
 
+	ingredientsRepo := repository.NewIngredientRepository(db)
+	ingredientsListRepo := repository.NewIngredientsListRepository(db)
+	userRepo := repository.NewUserReposiotry(db)
+	unitRepo := repository.NewUnitRepository(db)
+	recipeRepo := repository.NewRecipeRepository(db)
+
 	app := application{
 		logger:          logger,
 		debugMode:       *debug,
 		tmplCache:       tmplCache,
 		sessionManager:  sessionManager,
-		recipies:        &models.RecipeModel{DB: db},
-		users:           &models.UserModel{DB: db},
-		units:           &models.UnitModel{DB: db},
-		ingredientsList: &models.IngredientsListModel{DB: db},
-		ingredients:     &models.IngredientModel{DB: db},
+		recipies:        recipeRepo,
+		users:           userRepo,
+		units:           unitRepo,
+		ingredientsList: ingredientsListRepo,
+		ingredients:     ingredientsRepo,
 	}
 
 	srv := &http.Server{
