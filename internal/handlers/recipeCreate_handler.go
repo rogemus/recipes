@@ -8,7 +8,6 @@ import (
 	"recipies.krogowski.dev/internal/core"
 	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/tmpl"
 	"recipies.krogowski.dev/internal/validator"
 )
 
@@ -77,7 +76,7 @@ func (h *recipeCreateHandler) post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !form.IsValid() {
-		data := tmpl.NewData(r)
+		data := h.Tmpl.NewData(r)
 
 		ingredients, err := h.ingredients.List()
 		if err != nil {
@@ -132,7 +131,8 @@ func (h *recipeCreateHandler) get(w http.ResponseWriter, r *http.Request) {
 		h.serverError(w, r, err)
 		return
 	}
-	data := tmpl.NewData(r)
+
+	data := h.Tmpl.NewData(r)
 	data.Form = recipieCreateForm{}
 
 	data.Units = units

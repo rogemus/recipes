@@ -6,7 +6,6 @@ import (
 	"recipies.krogowski.dev/internal/core"
 	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/tmpl"
 )
 
 type homeHandler struct {
@@ -29,7 +28,7 @@ func (h *homeHandler) get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := tmpl.NewData(r)
+	data := h.Tmpl.NewData(r)
 	data.Recipies = recipies
 
 	h.render(w, r, http.StatusOK, "home.tmpl", data)

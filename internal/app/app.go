@@ -40,13 +40,6 @@ func New() app {
 		os.Exit(1)
 	}
 
-	tmplCache, err := tmpl.NewCache()
-
-	if err != nil {
-		logger.Error(err.Error())
-		os.Exit(1)
-	}
-
 	ingredientsRepo := repository.NewIngredientRepository(db)
 	ingredientsListRepo := repository.NewIngredientsListRepository(db)
 	userRepo := repository.NewUserReposiotry(db)
@@ -55,14 +48,20 @@ func New() app {
 
 	session := session.New(db)
 	ctx := ctx.New()
+	tmpl := tmpl.New(session, ctx)
+
+	if err = tmpl.NewCache(); err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
 
 	// TODO find better way to pass Session
 	env := core.Env{
-		Ctx:       ctx,
 		Session:   session,
+		Tmpl:      tmpl,
+		Context:   ctx,
 		Logger:    logger,
 		DebugMode: *debug,
-		TmplCache: tmplCache,
 	}
 
 	mux := http.NewServeMux()
@@ -74,7 +73,15 @@ func New() app {
 	homeHandler := handlers.NewHomeHandler(env, recipeRepo)
 	recipeHandler := handlers.NewRecipeHandler(env, recipeRepo, ingredientsListRepo)
 	recipeCreateHandler := handlers.NewRecipeCreateHandler(env, recipeRepo, ingredientsListRepo, ingredientsRepo, unitRepo)
+	loginHandler := handlers.NewLoginHandler(env, userRepo)
+	logoutHandler := handlers.NewLogoutHandler(env)
+	signupHandler := handlers.NewSignupHandler(env, userRepo)
+	userProfileHandler := handlers.NewUserProfileHandler(env, userRepo)
 
+	loginHandler.RegisterRoute(mux, midw)
+	logoutHandler.RegisterRoute(mux, midw)
+	signupHandler.RegisterRoute(mux, midw)
+	userProfileHandler.RegisterRoute(mux, midw)
 	homeHandler.RegisterRoute(mux, midw)
 	recipeHandler.RegisterRoute(mux, midw)
 	recipeCreateHandler.RegisterRoute(mux, midw)

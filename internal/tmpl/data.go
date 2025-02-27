@@ -8,7 +8,7 @@ import (
 	"recipies.krogowski.dev/internal/models"
 )
 
-type TmplData struct {
+type TemplateData struct {
 	CurrentYear     int
 	Recipe          models.Recipe
 	User            models.User
@@ -23,12 +23,12 @@ type TmplData struct {
 	UserName        string
 }
 
-func NewData(r *http.Request) TmplData {
-	return TmplData{
-		CurrentYear: time.Now().Year(),
-		// Flash:           app.sessionManager.PopString(r.Context(), "flash"),
-		// IsAuthenticated: app.isAuthenticated(r),
-		//   UserName:        app.sessionUserName(r),
-		CSRFToken: nosurf.Token(r),
+func (t *Tmpl) NewData(r *http.Request) TemplateData {
+	return TemplateData{
+		CurrentYear:     time.Now().Year(),
+		Flash:           t.GetFlash(r),
+		IsAuthenticated: t.IsAuthenticated(r),
+		UserName:        t.GetUserName(r),
+		CSRFToken:       nosurf.Token(r),
 	}
 }

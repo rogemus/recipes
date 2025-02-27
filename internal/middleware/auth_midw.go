@@ -9,7 +9,7 @@ import (
 
 func (m *Midw) requireAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !m.Ctx.IsAuthenticated(r) {
+		if !m.IsAuthenticated(r) {
 			http.Redirect(w, r, "/auth/login", http.StatusSeeOther)
 			return
 		}
@@ -47,7 +47,7 @@ func (m *Midw) authenticate(next http.Handler) http.Handler {
 		// }
 		//
 		if exists {
-			ctx := m.Ctx.CopyCtxWithKey(r, ctx.IsAuthenticatedContextKey, true)
+			ctx := m.CopyCtxWithKey(r, ctx.IsAuthenticatedContextKey, true)
 			r = r.WithContext(ctx)
 		}
 

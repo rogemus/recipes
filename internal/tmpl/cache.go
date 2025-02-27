@@ -25,13 +25,13 @@ var functions = template.FuncMap{
 	"humanDate":  humanDate,
 }
 
-func NewCache() (TmplCache, error) {
+func (t *Tmpl) NewCache() error {
 	cache := TmplCache{}
 
 	pages, err := fs.Glob(ui.Files, "html/pages/*.tmpl")
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	for _, page := range pages {
@@ -46,11 +46,12 @@ func NewCache() (TmplCache, error) {
 		ts, err := template.New(name).Funcs(functions).ParseFS(ui.Files, patterns...)
 
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		cache[name] = ts
 	}
 
-	return cache, nil
+	t.Cache = cache
+	return nil
 }

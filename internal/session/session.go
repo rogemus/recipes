@@ -45,3 +45,8 @@ func (s *Session) GetUserName(r *http.Request) string {
 func (s *Session) GetFlash(r *http.Request) string {
 	return s.Manager.PopString(r.Context(), "flash")
 }
+
+func (s *Session) SetLoginUser(r *http.Request, userId int, userName string) {
+	s.Manager.Put(r.Context(), UserIdSessionKey, userId)
+	s.Manager.Put(r.Context(), UserNameSessionKey, userName)
+}

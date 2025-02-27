@@ -26,8 +26,8 @@ func (h *requestHandler) serverError(w http.ResponseWriter, r *http.Request, err
 	http.Error(w, body, http.StatusInternalServerError)
 }
 
-func (h *requestHandler) render(w http.ResponseWriter, r *http.Request, status int, page string, data tmpl.TmplData) {
-	ts, ok := h.TmplCache[page]
+func (h *requestHandler) render(w http.ResponseWriter, r *http.Request, status int, page string, data tmpl.TemplateData) {
+	ts, ok := h.Tmpl.Cache[page]
 
 	if !ok {
 		err := fmt.Errorf("template: template %s does not exist", page)

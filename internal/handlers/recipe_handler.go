@@ -7,7 +7,6 @@ import (
 	"recipies.krogowski.dev/internal/core"
 	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/tmpl"
 )
 
 type recipeHandler struct {
@@ -51,7 +50,7 @@ func (h *recipeHandler) get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := tmpl.NewData(r)
+	data := h.Tmpl.NewData(r)
 	data.Recipe = recipe
 	data.IngredientList = ingredientsList
 
