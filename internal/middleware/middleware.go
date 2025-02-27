@@ -7,10 +7,10 @@ import (
 )
 
 type Midw struct {
-	userRepo       repository.UserRepository
-	DynamicChain   alice.Chain
-	StandardChain  alice.Chain
-	ProtectedChain alice.Chain
+	userRepo  repository.UserRepository
+	Dynamic   alice.Chain
+	Standard  alice.Chain
+	Protected alice.Chain
 	core.Env
 }
 
@@ -23,10 +23,10 @@ func New(env core.Env, userRepo repository.UserRepository) *Midw {
 
 func (m *Midw) Init() {
 	standard := alice.New(m.logRequest, m.commonHeader)
-	dynamic := alice.New()
-	protected := dynamic.Append()
+	dynamic := alice.New(m.loadAndSave, m.noSurf, m.authenticate)
+	protected := dynamic.Append(m.requireAuth)
 
-	m.DynamicChain = dynamic
-	m.StandardChain = standard
-	m.ProtectedChain = protected
+	m.Dynamic = dynamic
+	m.Standard = standard
+	m.Protected = protected
 }

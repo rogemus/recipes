@@ -59,5 +59,5 @@ func (h *recipeHandler) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *recipeHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
-
+	mux.Handle("GET /recipies/{id}", midw.Dynamic.ThenFunc(h.get))
 }

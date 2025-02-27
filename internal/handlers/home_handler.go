@@ -36,5 +36,5 @@ func (h *homeHandler) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *homeHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
-	mux.Handle("GET /{$}", midw.DynamicChain.ThenFunc(h.get))
+	mux.Handle("GET /{$}", midw.Dynamic.ThenFunc(h.get))
 }

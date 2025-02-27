@@ -9,10 +9,12 @@ import (
 	"time"
 
 	"recipies.krogowski.dev/internal/core"
+	"recipies.krogowski.dev/internal/ctx"
 	"recipies.krogowski.dev/internal/db"
 	"recipies.krogowski.dev/internal/handlers"
 	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
+	"recipies.krogowski.dev/internal/session"
 	"recipies.krogowski.dev/internal/tmpl"
 	"recipies.krogowski.dev/ui"
 )
@@ -51,7 +53,13 @@ func New() app {
 	unitRepo := repository.NewUnitRepository(db)
 	recipeRepo := repository.NewRecipeRepository(db)
 
+	session := session.New(db)
+	ctx := ctx.New()
+
+	// TODO find better way to pass Session
 	env := core.Env{
+		Ctx:       ctx,
+		Session:   session,
 		Logger:    logger,
 		DebugMode: *debug,
 		TmplCache: tmplCache,
@@ -74,7 +82,7 @@ func New() app {
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", *port),
 		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
-		Handler:      midw.StandardChain.Then(mux),
+		Handler:      midw.Standard.Then(mux),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
