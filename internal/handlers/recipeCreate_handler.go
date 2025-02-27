@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"recipies.krogowski.dev/internal/core"
+	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
 	"recipies.krogowski.dev/internal/tmpl"
 	"recipies.krogowski.dev/internal/validator"
@@ -138,5 +139,5 @@ func (h *recipeCreateHandler) get(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, http.StatusOK, "recipeCreate.tmpl", data)
 }
 
-func (h *recipeCreateHandler) RegisterRoute(mux *http.ServeMux) {
+func (h *recipeCreateHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
 }

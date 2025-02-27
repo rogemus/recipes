@@ -11,8 +11,10 @@ import (
 	"recipies.krogowski.dev/internal/core"
 	"recipies.krogowski.dev/internal/db"
 	"recipies.krogowski.dev/internal/handlers"
+	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
 	"recipies.krogowski.dev/internal/tmpl"
+	"recipies.krogowski.dev/ui"
 )
 
 type app struct {
@@ -45,7 +47,7 @@ func New() app {
 
 	ingredientsRepo := repository.NewIngredientRepository(db)
 	ingredientsListRepo := repository.NewIngredientsListRepository(db)
-	// userRepo := repository.NewUserReposiotry(db)
+	userRepo := repository.NewUserReposiotry(db)
 	unitRepo := repository.NewUnitRepository(db)
 	recipeRepo := repository.NewRecipeRepository(db)
 
@@ -55,19 +57,24 @@ func New() app {
 		TmplCache: tmplCache,
 	}
 
+	mux := http.NewServeMux()
+	midw := middleware.New(env, userRepo)
+	midw.Init()
+
+	mux.Handle("GET /static/", http.FileServerFS(ui.Files))
+
 	homeHandler := handlers.NewHomeHandler(env, recipeRepo)
 	recipeHandler := handlers.NewRecipeHandler(env, recipeRepo, ingredientsListRepo)
 	recipeCreateHandler := handlers.NewRecipeCreateHandler(env, recipeRepo, ingredientsListRepo, ingredientsRepo, unitRepo)
 
-	mux := http.NewServeMux()
-	homeHandler.RegisterRoute(mux)
-	recipeHandler.RegisterRoute(mux)
-	recipeCreateHandler.RegisterRoute(mux)
+	homeHandler.RegisterRoute(mux, midw)
+	recipeHandler.RegisterRoute(mux, midw)
+	recipeCreateHandler.RegisterRoute(mux, midw)
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", *port),
 		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
-		Handler:      mux,
+		Handler:      midw.StandardChain.Then(mux),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

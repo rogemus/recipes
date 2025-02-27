@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"recipies.krogowski.dev/internal/core"
+	"recipies.krogowski.dev/internal/middleware"
 	"recipies.krogowski.dev/internal/repository"
 	"recipies.krogowski.dev/internal/tmpl"
 )
@@ -34,6 +35,6 @@ func (h *homeHandler) get(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, http.StatusOK, "home.tmpl", data)
 }
 
-func (h *homeHandler) RegisterRoute(mux *http.ServeMux) {
-	mux.HandleFunc("GET /{$}", h.get)
+func (h *homeHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
+	mux.Handle("GET /{$}", midw.DynamicChain.ThenFunc(h.get))
 }
