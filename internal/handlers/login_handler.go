@@ -73,8 +73,7 @@ func (h *loginHandler) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.Manager.RenewToken(r.Context())
-	if err != nil {
+	if err = h.RenewToken(r); err != nil {
 		h.serverError(w, r, err)
 		return
 	}

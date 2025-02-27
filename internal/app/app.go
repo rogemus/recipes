@@ -77,6 +77,7 @@ func New() app {
 	logoutHandler := handlers.NewLogoutHandler(env)
 	signupHandler := handlers.NewSignupHandler(env, userRepo)
 	userProfileHandler := handlers.NewUserProfileHandler(env, userRepo)
+	recipesListHandler := handlers.NewRecipeListHandler(env, recipeRepo)
 
 	loginHandler.RegisterRoute(mux, midw)
 	logoutHandler.RegisterRoute(mux, midw)
@@ -85,6 +86,7 @@ func New() app {
 	homeHandler.RegisterRoute(mux, midw)
 	recipeHandler.RegisterRoute(mux, midw)
 	recipeCreateHandler.RegisterRoute(mux, midw)
+	recipesListHandler.RegisterRoute(mux, midw)
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", *port),

@@ -72,7 +72,7 @@ func (r *recipeRepo) Get(id int) (models.Recipe, error) {
 }
 
 func (r *recipeRepo) List() ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, instructions, created FROM recipies LIMIT 10`
+	stmt := `SELECT id, title, description, created FROM recipies LIMIT 10`
 
 	rows, err := r.DB.Query(stmt)
 

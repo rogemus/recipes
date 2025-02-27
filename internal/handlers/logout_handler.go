@@ -19,14 +19,12 @@ func NewLogoutHandler(env core.Env) logoutHangler {
 }
 
 func (h *logoutHangler) post(w http.ResponseWriter, r *http.Request) {
-	err := h.Manager.RenewToken(r.Context())
-
-	if err != nil {
+	if err := h.RenewToken(r); err != nil {
 		h.serverError(w, r, err)
 		return
 	}
 
-	h.Manager.Remove(r.Context(), "authenticatedUserID")
+	h.RemoveToken(r)
 	h.SetFlashMsg(r, consts.MsgLogout)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
