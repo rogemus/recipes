@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"html/template"
 	"log/slog"
 	"net/http"
 	"os"
@@ -14,26 +13,16 @@ import (
 	"recipies.krogowski.dev/internal/repository"
 )
 
-type application struct {
-	logger          *slog.Logger
-	debugMode       bool
-	tmplCache       map[string]*template.Template
-	sessionManager  *scs.SessionManager
-	recipies        repository.RecipeRepository
-	users           repository.UserRepository
-	ingredientsList repository.IngredientsListRepository
-	ingredients     repository.IngredientRepository
-	units           repository.UnitRepository
-}
-
 func main() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+
 	// flags
 	port := flag.String("port", "4848", "server port")
+
 	debug := flag.Bool("debug", false, "debug mode")
 	dbPath := flag.String("db", "./recipies.db", "db file with path")
 	flag.Parse()
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	db, err := NewDb(*dbPath)
 
 	if err != nil {
