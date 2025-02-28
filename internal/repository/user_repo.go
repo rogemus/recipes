@@ -31,7 +31,7 @@ func (m *userRepo) Insert(name, email, password string) error {
 		return err
 	}
 
-	stmt := `INSERT INTO users (name, email, hashed_password) VALUES (?, ?, ?)`
+	stmt := `INSERT INTO users (name, email, hashed_password) VALUES ($1, $2, $3);`
 	_, err = m.DB.Exec(stmt, name, email, string(hashedPassword))
 
 	if err != nil {
@@ -46,7 +46,7 @@ func (m *userRepo) Authenticate(email, password string) (int, error) {
 	var id int
 	var hashedPassword []byte
 
-	stmt := "SELECT id, hashed_password FROM users WHERE email = ?"
+	stmt := "SELECT id, hashed_password FROM users WHERE email = $1;"
 	err := m.DB.QueryRow(stmt, email).Scan(&id, &hashedPassword)
 
 	if err != nil {
@@ -71,7 +71,7 @@ func (m *userRepo) Authenticate(email, password string) (int, error) {
 
 func (m *userRepo) Exists(id int) (bool, error) {
 	var exists bool
-	stmt := "SELECT EXISTS(SELECT true FROM users WHERE id = ?)"
+	stmt := "SELECT EXISTS(SELECT true FROM users WHERE id = $1);"
 	err := m.DB.QueryRow(stmt, id).Scan(&exists)
 
 	return exists, err
@@ -79,7 +79,7 @@ func (m *userRepo) Exists(id int) (bool, error) {
 
 func (m *userRepo) Get(id int) (models.User, error) {
 	var user models.User
-	stmt := "SELECT id, name, email FROM users WHERE id = ?"
+	stmt := "SELECT id, name, email FROM users WHERE id = $1;"
 
 	err := m.DB.QueryRow(stmt, id).Scan(&user.ID, &user.Name, &user.Email)
 

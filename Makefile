@@ -13,7 +13,7 @@ start:
 	go run ./cmd/web/
 
 dbUp:
-	migrate -path db/migrations -database sqlite3://recipies.db up
+	migrate -path=./db/migrations -database=${RECIPIES_DB_DSN} up
 
 dbDown:
-	migrate -path db/migrations -database sqlite3://recipies.db down
+	migrate -path=./db/migrations -database=${RECIPIES_DB_DSN} down

@@ -4,12 +4,22 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
-func New(dbPath string) (*sql.DB, error) {
-	dbConnection := fmt.Sprintf("%s?_loc=auto", dbPath)
-	db, err := sql.Open("sqlite3", dbConnection)
+const ()
+
+func New(
+	host string,
+	port int,
+	user string,
+	password string,
+	dbname string,
+
+) (*sql.DB, error) {
+	psqlconn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, dbname)
+
+	db, err := sql.Open("postgres", psqlconn)
 
 	if err != nil {
 		return nil, err

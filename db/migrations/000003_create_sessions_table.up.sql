@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS
   "sessions" (
-    "token" CHAR(43),
-    "data" BLOB NOT NULL,
-    "expiry" TIMESTAMP (6) NOT NULL,
-    "created" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY("token")
+    "token" TEXT PRIMARY KEY,
+    "data" BYTEA NOT NULL,
+    "expiry" TIMESTAMPTZ NOT NULL,
+    "created" timestamp(0) with time zone NOT NULL DEFAULT NOW()
   );
+
+CREATE INDEX sessions_expiry_idx ON sessions (expiry);

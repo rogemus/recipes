@@ -34,7 +34,7 @@ func (m *ingredientsListRepo) List(recipeId int) ([]models.IngredientsListItem, 
     INNER JOIN units ON ingredients_list.unit_id = units.id
     INNER JOIN ingredients ON ingredients_list.ingredient_id = ingredients.id
   WHERE
-    recipe_id = ?;
+    recipe_id = $1;
   `
 
 	rows, err := m.DB.Query(stmt, recipeId)

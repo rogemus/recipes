@@ -24,7 +24,7 @@ func NewRecipeRepository(db *sql.DB) RecipeRepository {
 }
 
 func (r *recipeRepo) RandomList(limit int) ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipies ORDER BY RANDOM() LIMIT ?`
+	stmt := `SELECT id, title, description, created FROM recipies ORDER BY RANDOM() LIMIT $1;`
 
 	rows, err := r.DB.Query(stmt, limit)
 
@@ -54,7 +54,7 @@ func (r *recipeRepo) RandomList(limit int) ([]models.Recipe, error) {
 }
 
 func (r *recipeRepo) Get(id int) (models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipies WHERE id = ?`
+	stmt := `SELECT id, title, description, created FROM recipies WHERE id = $1;`
 
 	recipe := models.Recipe{}
 
@@ -102,18 +102,17 @@ func (r *recipeRepo) List() ([]models.Recipe, error) {
 }
 
 func (r *recipeRepo) Insert(title, description string, userId int) (int, error) {
-	stmt := `INSERT INTO recipies (title, description, user_id) VALUES(?, ?, ?)`
-	result, err := r.DB.Exec(stmt, title, description, userId)
+	lastInsertId := 0
+	stmt := `INSERT INTO recipies (title, description, user_id) VALUES($1, $2, $3) RETURNING id;`
+	err := r.DB.QueryRow(stmt, title, description, userId).Scan(&lastInsertId)
 
 	if err != nil {
 		return 0, err
 	}
 
-	id, err := result.LastInsertId()
-
-	if err != nil {
+	if lastInsertId == 0 {
 		return 0, err
 	}
 
-	return int(id), nil
+	return int(lastInsertId), nil
 }

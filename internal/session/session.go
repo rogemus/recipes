@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/alexedwards/scs/sqlite3store"
+	"github.com/alexedwards/scs/postgresstore"
 	"github.com/alexedwards/scs/v2"
 )
 
@@ -20,7 +20,7 @@ type Session struct {
 
 func New(db *sql.DB) *Session {
 	manager := scs.New()
-	manager.Store = sqlite3store.New(db)
+	manager.Store = postgresstore.New(db)
 	manager.Lifetime = 12 * time.Hour
 
 	return &Session{

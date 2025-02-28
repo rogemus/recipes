@@ -30,10 +30,17 @@ func New() app {
 	// Flags
 	port := flag.String("port", "4848", "server port")
 	debug := flag.Bool("debug", false, "debug mode")
-	dbPath := flag.String("db", "./recipies.db", "db file with path")
+	dbHost := flag.String("dbHost", "localhost", "db host")
+	dbPort := flag.Int("dbPort", 5432, "db host port")
+	dbUser := flag.String("dbUser", "recipiesuser", "db user name")
+	dbPass := flag.String("dbPass", "pass1234", "db user password")
+	dbName := flag.String("dbName", "recipies", "db name")
+
 	flag.Parse()
 
-	db, err := db.New(*dbPath)
+	db, err := db.New(
+		*dbHost, *dbPort, *dbUser, *dbPass, *dbName,
+	)
 
 	if err != nil {
 		logger.Error(err.Error())

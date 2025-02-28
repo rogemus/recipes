@@ -21,7 +21,7 @@ func NewIngredientRepository(db *sql.DB) IngredientRepository {
 }
 
 func (m *ingredientRepo) Insert(name string) error {
-	stmt := `INSERT INTO ingredients (name) VALUES (?);`
+	stmt := `INSERT INTO ingredients (name) VALUES ($1);`
 
 	_, err := m.DB.Exec(stmt, name)
 
@@ -38,7 +38,7 @@ func (m *ingredientRepo) Search(query string) ([]models.Ingredient, error) {
 }
 
 func (m *ingredientRepo) List() ([]models.Ingredient, error) {
-	stmt := `SELECT id, name FROM ingredients`
+	stmt := `SELECT id, name FROM ingredients;`
 
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
