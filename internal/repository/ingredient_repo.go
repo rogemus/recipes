@@ -33,8 +33,27 @@ func (m *ingredientRepo) Insert(name string) error {
 }
 
 func (m *ingredientRepo) Search(query string) ([]models.Ingredient, error) {
-	// TODO
-	return nil, nil
+	stmt := `SELECT id, name FROM ingredients WHERE LOWER(name) LIKE '$1%' LIMIT 3;`
+
+	rows, err := m.DB.Query(stmt, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	ingredients := make([]models.Ingredient, 0)
+
+	for rows.Next() {
+		var i models.Ingredient
+
+		err = rows.Scan(&i.ID, &i.Name)
+		if err != nil {
+			return nil, err
+		}
+		ingredients = append(ingredients, i)
+	}
+
+	return ingredients, nil
 }
 
 func (m *ingredientRepo) List() ([]models.Ingredient, error) {

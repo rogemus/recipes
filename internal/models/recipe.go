@@ -5,9 +5,9 @@ import (
 )
 
 type Recipe struct {
-	ID          int
-	Title       string
-	Created     time.Time
-	Description string
-	UserId      int
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Created     time.Time `json:"created"`
+	Description string    `json:"description"`
+	UserId      int       `json:"userid"`
 }

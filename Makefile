@@ -10,7 +10,7 @@ dev:
 
 start:
 	@echo "Starting prod server ..."
-	go run ./cmd/web/
+	go run ./cmd/web/ -debug
 
 dbUp:
 	migrate -path=./db/migrations -database=${RECIPIES_DB_DSN} up

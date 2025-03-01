@@ -5,7 +5,7 @@ import (
 )
 
 type Ingredient struct {
-	ID      int
-	Name    string
-	Created time.Time
+	ID      int       `json:"id"`
+	Name    string    `json:"name"`
+	Created time.Time `json:"created"`
 }

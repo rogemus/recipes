@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"recipies.krogowski.dev/internal/consts"
 	"recipies.krogowski.dev/internal/models"
@@ -13,6 +14,7 @@ type RecipeRepository interface {
 	List() ([]models.Recipe, error)
 	RandomList(limit int) ([]models.Recipe, error)
 	Insert(title, description string, userId int) (int, error)
+	Search(query string) ([]models.Recipe, error)
 }
 
 type recipeRepo struct {
@@ -115,4 +117,35 @@ func (r *recipeRepo) Insert(title, description string, userId int) (int, error) 
 	}
 
 	return int(lastInsertId), nil
+}
+
+func (r *recipeRepo) Search(query string) ([]models.Recipe, error) {
+	stmt := `SELECT id, title, description, created FROM recipies WHERE LOWER(title) LIKE '%s%s' LIMIT 3;`
+	queryStmt := fmt.Sprintf(stmt, query, "%")
+
+	rows, err := r.DB.Query(queryStmt)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var recipies = make([]models.Recipe, 0)
+
+	for rows.Next() {
+		var r models.Recipe
+		err = rows.Scan(&r.ID, &r.Title, &r.Description, &r.Created)
+
+		if err != nil {
+			return nil, err
+		}
+
+		recipies = append(recipies, r)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return recipies, nil
 }
