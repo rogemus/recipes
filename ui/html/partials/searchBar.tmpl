@@ -1,6 +1,6 @@
 {{ define "searchBar" }}
 
-<form method="post" action="/recipies-search">
+<form method="post" action="/recipes-search">
   <div @click.outside="reset" x-data="search">
     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
     <div class="form-group">
@@ -13,7 +13,7 @@
           <ul>
             <template x-for="result in results">
               <li>
-                <a x-bind:href="`/recipies/${result.id}`" class="h6"><span x-text="result.title"></span></a>
+                <a x-bind:href="`/recipes/${result.id}`" class="h6"><span x-text="result.title"></span></a>
               </li>
             </template>
           </ul>
@@ -43,7 +43,7 @@
       async handleType() {
         if (this.query.length >= 3) {
           try {
-            const response = await fetch("/recipies-search", {
+            const response = await fetch("/recipes-search", {
               method: "POST",
               body: JSON.stringify({query: this.query}),
               headers: {

@@ -4,7 +4,7 @@
 
 <h1>Create recipe</h1>
 
-<form action="/recipies/create" method="post">
+<form action="/recipee/create" method="post">
   <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
   <div class="form-group {{ with .Form.FieldErrors.title }} has-error {{ end }}">
     <label class="form-label" for="title">Title</label>
