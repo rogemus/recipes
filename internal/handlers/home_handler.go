@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
 )
 
 type homeHandler struct {
@@ -21,7 +21,7 @@ func NewHomeHandler(env core.Env, recipeRepo repository.RecipeRepository) homeHa
 }
 
 func (h *homeHandler) get(w http.ResponseWriter, r *http.Request) {
-	recipies, err := h.recipes.RandomList(10)
+	recipes, err := h.recipes.RandomList(10)
 
 	if err != nil {
 		h.serverError(w, r, err)
@@ -29,7 +29,7 @@ func (h *homeHandler) get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := h.Tmpl.NewData(r)
-	data.Recipies = recipies
+	data.Recipes = recipes
 
 	h.render(w, r, http.StatusOK, "home.tmpl", data)
 }

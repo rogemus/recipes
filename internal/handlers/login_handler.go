@@ -4,11 +4,11 @@ import (
 	"errors"
 	"net/http"
 
-	"recipies.krogowski.dev/internal/consts"
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/validator"
+	"recipes.krogowski.dev/internal/consts"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type loginHandler struct {
@@ -88,7 +88,7 @@ func (h *loginHandler) post(w http.ResponseWriter, r *http.Request) {
 	h.SetLoginUser(r, id, user.Name)
 
 	h.SetFlashMsg(r, consts.MsgUserAuthenticeted)
-	http.Redirect(w, r, "/recipies/create", http.StatusSeeOther)
+	http.Redirect(w, r, "/recipes/create", http.StatusSeeOther)
 }
 
 func (h *loginHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {

@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"github.com/justinas/alice"
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/repository"
 )
 
 type Midw struct {

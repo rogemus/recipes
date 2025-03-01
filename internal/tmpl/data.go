@@ -5,14 +5,14 @@ import (
 	"time"
 
 	"github.com/justinas/nosurf"
-	"recipies.krogowski.dev/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type TemplateData struct {
 	CurrentYear     int
 	Recipe          models.Recipe
 	User            models.User
-	Recipies        []models.Recipe
+	Recipes        []models.Recipe
 	Ingredients     []models.Ingredient
 	Units           []models.Unit
 	IngredientList  []models.IngredientsListItem

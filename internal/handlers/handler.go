@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"recipies.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/core"
 )
 
 type requestHandler struct {

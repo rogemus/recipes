@@ -4,24 +4,24 @@ import (
 	"net/http"
 	"strconv"
 
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
 )
 
 type recipeHandler struct {
-	recipies        repository.RecipeRepository
+	recipes        repository.RecipeRepository
 	ingredientsList repository.IngredientsListRepository
 	requestHandler
 }
 
 func NewRecipeHandler(
 	env core.Env,
-	recipies repository.RecipeRepository,
+	recipes repository.RecipeRepository,
 	ingredientsList repository.IngredientsListRepository,
 ) recipeHandler {
 	return recipeHandler{
-		recipies:        recipies,
+		recipes:        recipes,
 		ingredientsList: ingredientsList,
 		requestHandler:  requestHandler{Env: env},
 	}
@@ -37,7 +37,7 @@ func (h *recipeHandler) get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipe, err := h.recipies.Get(id)
+	recipe, err := h.recipes.Get(id)
 
 	if err != nil {
 		h.serverError(w, r, err)
@@ -58,5 +58,5 @@ func (h *recipeHandler) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *recipeHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
-	mux.Handle("GET /recipies/{id}", midw.Dynamic.ThenFunc(h.get))
+	mux.Handle("GET /recipes/{id}", midw.Dynamic.ThenFunc(h.get))
 }

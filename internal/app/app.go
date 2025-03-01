@@ -8,15 +8,15 @@ import (
 	"os"
 	"time"
 
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/ctx"
-	"recipies.krogowski.dev/internal/db"
-	"recipies.krogowski.dev/internal/handlers"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/session"
-	"recipies.krogowski.dev/internal/tmpl"
-	"recipies.krogowski.dev/ui"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/ctx"
+	"recipes.krogowski.dev/internal/db"
+	"recipes.krogowski.dev/internal/handlers"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/session"
+	"recipes.krogowski.dev/internal/tmpl"
+	"recipes.krogowski.dev/ui"
 )
 
 type app struct {
@@ -32,9 +32,9 @@ func New() app {
 	debug := flag.Bool("debug", false, "debug mode")
 	dbHost := flag.String("dbHost", "localhost", "db host")
 	dbPort := flag.Int("dbPort", 5432, "db host port")
-	dbUser := flag.String("dbUser", "recipiesuser", "db user name")
+	dbUser := flag.String("dbUser", "recipesuser", "db user name")
 	dbPass := flag.String("dbPass", "pass1234", "db user password")
-	dbName := flag.String("dbName", "recipies", "db name")
+	dbName := flag.String("dbName", "recipes", "db name")
 
 	flag.Parse()
 

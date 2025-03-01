@@ -1,4 +1,4 @@
-module recipies.krogowski.dev
+module recipes.krogowski.dev
 
 go 1.23.6
 

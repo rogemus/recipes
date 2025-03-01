@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS
     "created" timestamp(0) with time zone NOT NULL DEFAULT NOW(),
     FOREIGN KEY ("unit_id") REFERENCES "units" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION,
     FOREIGN KEY ("ingredient_id") REFERENCES "ingredients" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION,
-    FOREIGN KEY ("recipe_id") REFERENCES "recipies" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION
+    FOREIGN KEY ("recipe_id") REFERENCES "recipes" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION
   );
 

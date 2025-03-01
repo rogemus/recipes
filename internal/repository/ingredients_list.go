@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"recipies.krogowski.dev/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type ingredientsListRepo struct {

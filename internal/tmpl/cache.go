@@ -7,7 +7,7 @@ import (
 	"text/template"
 	"time"
 
-	"recipies.krogowski.dev/ui"
+	"recipes.krogowski.dev/ui"
 )
 
 type TmplCache = map[string]*template.Template

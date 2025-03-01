@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"recipies.krogowski.dev/internal/consts"
-	"recipies.krogowski.dev/internal/models"
+	"recipes.krogowski.dev/internal/consts"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type RecipeRepository interface {
@@ -26,7 +26,7 @@ func NewRecipeRepository(db *sql.DB) RecipeRepository {
 }
 
 func (r *recipeRepo) RandomList(limit int) ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipies ORDER BY RANDOM() LIMIT $1;`
+	stmt := `SELECT id, title, description, created FROM recipes ORDER BY RANDOM() LIMIT $1;`
 
 	rows, err := r.DB.Query(stmt, limit)
 
@@ -35,7 +35,7 @@ func (r *recipeRepo) RandomList(limit int) ([]models.Recipe, error) {
 	}
 	defer rows.Close()
 
-	var recipies = make([]models.Recipe, 0)
+	var recipes = make([]models.Recipe, 0)
 
 	for rows.Next() {
 		var r models.Recipe
@@ -45,18 +45,18 @@ func (r *recipeRepo) RandomList(limit int) ([]models.Recipe, error) {
 			return nil, err
 		}
 
-		recipies = append(recipies, r)
+		recipes = append(recipes, r)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return recipies, nil
+	return recipes, nil
 }
 
 func (r *recipeRepo) Get(id int) (models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipies WHERE id = $1;`
+	stmt := `SELECT id, title, description, created FROM recipes WHERE id = $1;`
 
 	recipe := models.Recipe{}
 
@@ -74,7 +74,7 @@ func (r *recipeRepo) Get(id int) (models.Recipe, error) {
 }
 
 func (r *recipeRepo) List() ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipies LIMIT 10`
+	stmt := `SELECT id, title, description, created FROM recipes LIMIT 10`
 
 	rows, err := r.DB.Query(stmt)
 
@@ -83,7 +83,7 @@ func (r *recipeRepo) List() ([]models.Recipe, error) {
 	}
 	defer rows.Close()
 
-	var recipies = make([]models.Recipe, 0)
+	var recipes = make([]models.Recipe, 0)
 
 	for rows.Next() {
 		var r models.Recipe
@@ -93,19 +93,19 @@ func (r *recipeRepo) List() ([]models.Recipe, error) {
 			return nil, err
 		}
 
-		recipies = append(recipies, r)
+		recipes = append(recipes, r)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return recipies, nil
+	return recipes, nil
 }
 
 func (r *recipeRepo) Insert(title, description string, userId int) (int, error) {
 	lastInsertId := 0
-	stmt := `INSERT INTO recipies (title, description, user_id) VALUES($1, $2, $3) RETURNING id;`
+	stmt := `INSERT INTO recipes (title, description, user_id) VALUES($1, $2, $3) RETURNING id;`
 	err := r.DB.QueryRow(stmt, title, description, userId).Scan(&lastInsertId)
 
 	if err != nil {
@@ -120,7 +120,7 @@ func (r *recipeRepo) Insert(title, description string, userId int) (int, error) 
 }
 
 func (r *recipeRepo) Search(query string) ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipies WHERE LOWER(title) LIKE '%s%s' LIMIT 3;`
+	stmt := `SELECT id, title, description, created FROM recipes WHERE LOWER(title) LIKE '%s%s' LIMIT 3;`
 	queryStmt := fmt.Sprintf(stmt, query, "%")
 
 	rows, err := r.DB.Query(queryStmt)
@@ -130,7 +130,7 @@ func (r *recipeRepo) Search(query string) ([]models.Recipe, error) {
 	}
 	defer rows.Close()
 
-	var recipies = make([]models.Recipe, 0)
+	var recipes = make([]models.Recipe, 0)
 
 	for rows.Next() {
 		var r models.Recipe
@@ -140,12 +140,12 @@ func (r *recipeRepo) Search(query string) ([]models.Recipe, error) {
 			return nil, err
 		}
 
-		recipies = append(recipies, r)
+		recipes = append(recipes, r)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return recipies, nil
+	return recipes, nil
 }

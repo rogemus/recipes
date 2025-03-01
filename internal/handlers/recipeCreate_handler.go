@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"recipies.krogowski.dev/internal/consts"
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/validator"
+	"recipes.krogowski.dev/internal/consts"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type recipeCreateHandler struct {
@@ -115,7 +115,7 @@ func (h *recipeCreateHandler) post(w http.ResponseWriter, r *http.Request) {
 
 	h.Session.SetFlashMsg(r, consts.MsgRecipeCreated)
 
-	pagePath := fmt.Sprintf("/recipies/%d", id)
+	pagePath := fmt.Sprintf("/recipes/%d", id)
 	http.Redirect(w, r, pagePath, http.StatusSeeOther)
 }
 
@@ -142,6 +142,6 @@ func (h *recipeCreateHandler) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *recipeCreateHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
-	mux.Handle("GET /recipies/create", midw.Protected.ThenFunc(h.get))
-	mux.Handle("POST /recipies/create", midw.Protected.ThenFunc(h.post))
+	mux.Handle("GET /recipes/create", midw.Protected.ThenFunc(h.get))
+	mux.Handle("POST /recipes/create", midw.Protected.ThenFunc(h.post))
 }

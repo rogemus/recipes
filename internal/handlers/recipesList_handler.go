@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/validator"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type recipeListHandler struct {
@@ -36,7 +36,7 @@ func (h *recipeListHandler) get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := h.Tmpl.NewData(r)
-	data.Recipies = recipes
+	data.Recipes = recipes
 	h.render(w, r, http.StatusOK, "recipesList.tmpl", data)
 }
 
@@ -52,14 +52,14 @@ func (h *recipeListHandler) search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipies, err := h.recipes.Search(data.Query)
+	recipes, err := h.recipes.Search(data.Query)
 
 	if err != nil {
 		h.serverError(w, r, err)
 		return
 	}
 
-	json, err := json.Marshal(recipies)
+	json, err := json.Marshal(recipes)
 	if err != nil {
 		h.serverError(w, r, err)
 		return
@@ -71,7 +71,7 @@ func (h *recipeListHandler) search(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *recipeListHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
-	mux.Handle("GET /recipies/{$}", midw.Dynamic.ThenFunc(h.get))
+	mux.Handle("GET /recipes/{$}", midw.Dynamic.ThenFunc(h.get))
 	// TODO add proper middlewares
-	mux.HandleFunc("POST /recipies-search", h.search)
+	mux.HandleFunc("POST /recipes-search", h.search)
 }

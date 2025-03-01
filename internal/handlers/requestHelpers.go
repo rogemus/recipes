@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"recipies.krogowski.dev/internal/tmpl"
+	"recipes.krogowski.dev/internal/tmpl"
 )
 
 func (h *requestHandler) serverError(w http.ResponseWriter, r *http.Request, err error) {

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/justinas/nosurf"
-	"recipies.krogowski.dev/internal/ctx"
+	"recipes.krogowski.dev/internal/ctx"
 )
 
 func (m *Midw) requireAuth(next http.Handler) http.Handler {

@@ -3,11 +3,11 @@ package handlers
 import (
 	"net/http"
 
-	"recipies.krogowski.dev/internal/consts"
-	"recipies.krogowski.dev/internal/core"
-	"recipies.krogowski.dev/internal/middleware"
-	"recipies.krogowski.dev/internal/repository"
-	"recipies.krogowski.dev/internal/validator"
+	"recipes.krogowski.dev/internal/consts"
+	"recipes.krogowski.dev/internal/core"
+	"recipes.krogowski.dev/internal/middleware"
+	"recipes.krogowski.dev/internal/repository"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type signupHandler struct {

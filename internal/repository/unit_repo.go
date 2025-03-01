@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 
-	"recipies.krogowski.dev/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type unitRepo struct {

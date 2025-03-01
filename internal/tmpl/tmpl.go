@@ -1,8 +1,8 @@
 package tmpl
 
 import (
-	"recipies.krogowski.dev/internal/ctx"
-	"recipies.krogowski.dev/internal/session"
+	"recipes.krogowski.dev/internal/ctx"
+	"recipes.krogowski.dev/internal/session"
 )
 
 type Tmpl struct {

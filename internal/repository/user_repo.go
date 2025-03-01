@@ -5,8 +5,8 @@ import (
 	"errors"
 
 	"golang.org/x/crypto/bcrypt"
-	"recipies.krogowski.dev/internal/consts"
-	"recipies.krogowski.dev/internal/models"
+	"recipes.krogowski.dev/internal/consts"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type UserRepository interface {
