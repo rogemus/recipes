@@ -30,6 +30,7 @@ func (h *homeHandler) get(w http.ResponseWriter, r *http.Request) {
 
 	data := h.Tmpl.NewData(r)
 	data.Recipes = recipes
+	data.Form = searchForm{}
 
 	h.render(w, r, http.StatusOK, "home.tmpl", data)
 }
