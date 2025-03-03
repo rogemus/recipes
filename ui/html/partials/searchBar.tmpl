@@ -7,6 +7,9 @@
       <label class="form-label" for="search">Search</label>
       <input class="form-input" @keyup="handleType" @focus="handleFocus" x-model="query" type="text" name="query"
         id="search" placeholder="Search recipes ..." </div>
+      {{ with .Form.FieldErrors.query }}
+      {{ range . }}<div class="form-input-hint">{{ . }}</div> {{ end }}
+      {{ end }}
       <button type="submit">Search</button>
       <div class="results" x-show="focused">
         <template x-if="results.length > 0 && hasResults">
@@ -43,7 +46,7 @@
       async handleType() {
         if (this.query.length >= 3) {
           try {
-            const response = await fetch("/recipes-search", {
+            const response = await fetch("/recipes-autocomplete", {
               method: "POST",
               body: JSON.stringify({query: this.query}),
               headers: {

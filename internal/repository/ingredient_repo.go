@@ -57,7 +57,7 @@ func (m *ingredientRepo) Search(query string) ([]models.Ingredient, error) {
 }
 
 func (m *ingredientRepo) List() ([]models.Ingredient, error) {
-	stmt := `SELECT id, name FROM ingredients;`
+	stmt := `SELECT id, name FROM ingredients ORDER BY name ASC;`
 
 	rows, err := m.DB.Query(stmt)
 	if err != nil {

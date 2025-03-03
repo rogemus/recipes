@@ -19,7 +19,7 @@ func NewUnitRepository(db *sql.DB) UnitRepository {
 }
 
 func (m *unitRepo) List() ([]models.Unit, error) {
-	stmt := `SELECT id, name FROM units;`
+	stmt := `SELECT id, name FROM units ORDER BY name ASC;`
 
 	rows, err := m.DB.Query(stmt)
 

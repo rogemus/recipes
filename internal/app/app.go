@@ -32,8 +32,8 @@ func New() app {
 	debug := flag.Bool("debug", false, "debug mode")
 	dbHost := flag.String("dbHost", "localhost", "db host")
 	dbPort := flag.Int("dbPort", 5432, "db host port")
-	dbUser := flag.String("dbUser", "recipesuser", "db user name")
-	dbPass := flag.String("dbPass", "pass1234", "db user password")
+	dbUser := flag.String("dbUser", "recipes", "db user name")
+	dbPass := flag.String("dbPass", "Pass1234", "db user password")
 	dbName := flag.String("dbName", "recipes", "db name")
 
 	flag.Parse()

@@ -11,7 +11,7 @@ import (
 
 type RecipeRepository interface {
 	Get(id int) (models.Recipe, error)
-	List() ([]models.Recipe, error)
+	List(query string) ([]models.Recipe, error)
 	RandomList(limit int) ([]models.Recipe, error)
 	Insert(title, description string, userId int) (int, error)
 	Search(query string) ([]models.Recipe, error)
@@ -73,8 +73,15 @@ func (r *recipeRepo) Get(id int) (models.Recipe, error) {
 	return recipe, nil
 }
 
-func (r *recipeRepo) List() ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipes LIMIT 10`
+func (r *recipeRepo) List(query string) ([]models.Recipe, error) {
+	stmt := `SELECT id, title, description, created FROM recipes %s LIMIT 25`
+
+	if query != "" {
+		where := fmt.Sprintf("WHERE LOWER(title) LIKE '%s%s'", query, "%")
+		stmt = fmt.Sprintf(stmt, where)
+	} else {
+		stmt = fmt.Sprintf(stmt, "")
+	}
 
 	rows, err := r.DB.Query(stmt)
 
