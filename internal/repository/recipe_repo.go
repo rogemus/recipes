@@ -150,7 +150,7 @@ func (r *recipeRepo) Insert(title, description string, userId int) (int, error) 
 }
 
 func (r *recipeRepo) Search(query string) ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipes WHERE LOWER(title) LIKE '%s%s' LIMIT 3;`
+	stmt := `SELECT id, title, description, created FROM recipes WHERE LOWER(title) LIKE '%s%s' LIMIT 5;`
 	queryStmt := fmt.Sprintf(stmt, query, "%")
 
 	rows, err := r.DB.Query(queryStmt)

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -45,7 +46,6 @@ type recipieCreateForm struct {
 }
 
 func (h *recipeCreateHandler) post(w http.ResponseWriter, r *http.Request) {
-
 	err := r.ParseForm()
 	if err != nil {
 		// bad request
@@ -141,7 +141,38 @@ func (h *recipeCreateHandler) get(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, http.StatusOK, "recipeCreate.tmpl", data)
 }
 
+func (h *recipeCreateHandler) ingredientAutocomplete(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var data struct {
+		Query string `json:"query"`
+	}
+
+	if err := decoder.Decode(&data); err != nil {
+		h.serverError(w, r, err)
+		return
+	}
+
+	ingredients, err := h.ingredients.Search(data.Query)
+	if err != nil {
+		h.serverError(w, r, err)
+		return
+	}
+
+	json, err := json.Marshal(ingredients)
+	if err != nil {
+		h.serverError(w, r, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(json)
+}
+
 func (h *recipeCreateHandler) RegisterRoute(mux *http.ServeMux, midw *middleware.Midw) {
 	mux.Handle("GET /recipes/create", midw.Protected.ThenFunc(h.get))
 	mux.Handle("POST /recipes/create", midw.Protected.ThenFunc(h.post))
+
+	// TODO add proper middlewares
+	mux.HandleFunc("POST /ingredients-autocomplete", h.ingredientAutocomplete)
 }

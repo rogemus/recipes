@@ -14,6 +14,7 @@ type IngredientRepository interface {
 	Insert(name string) error
 	Search(query string) ([]models.Ingredient, error)
 	List() ([]models.Ingredient, error)
+	A
 }
 
 func NewIngredientRepository(db *sql.DB) IngredientRepository {
@@ -33,7 +34,7 @@ func (m *ingredientRepo) Insert(name string) error {
 }
 
 func (m *ingredientRepo) Search(query string) ([]models.Ingredient, error) {
-	stmt := `SELECT id, name FROM ingredients WHERE LOWER(name) LIKE '$1%' LIMIT 3;`
+	stmt := `SELECT id, name FROM ingredients WHERE LOWER(name) LIKE '$1%' LIMIT 5;`
 
 	rows, err := m.DB.Query(stmt, query)
 	if err != nil {
