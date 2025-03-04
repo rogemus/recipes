@@ -11,10 +11,11 @@ import (
 
 type RecipeRepository interface {
 	Get(id int) (models.Recipe, error)
-	List(query string) ([]models.Recipe, error)
+	List(query string, pageNumber, pageSize int, order string) ([]models.Recipe, error)
 	RandomList(limit int) ([]models.Recipe, error)
 	Insert(title, description string, userId int) (int, error)
 	Search(query string) ([]models.Recipe, error)
+	Pagination(pageNumber, pageSize int) (models.Pagination, error)
 }
 
 type recipeRepo struct {
@@ -73,16 +74,38 @@ func (r *recipeRepo) Get(id int) (models.Recipe, error) {
 	return recipe, nil
 }
 
-func (r *recipeRepo) List(query string) ([]models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipes %s LIMIT 25`
-
-	if query != "" {
-		where := fmt.Sprintf("WHERE LOWER(title) LIKE '%s%s'", query, "%")
-		stmt = fmt.Sprintf(stmt, where)
-	} else {
-		stmt = fmt.Sprintf(stmt, "")
+func (r *recipeRepo) Pagination(pageNumber, pageSize int) (models.Pagination, error) {
+	stmt := `SELECT COUNT (*) FROM recipes;`
+	pagination := models.Pagination{
+		PageSize: pageSize,
+		Page:     pageNumber,
 	}
 
+	err := r.DB.QueryRow(stmt).Scan(&pagination.ItemsCount)
+
+	if err != nil {
+		return models.Pagination{}, err
+	}
+
+	pagination.CountPages(pagination.PageSize)
+
+	return pagination, nil
+}
+
+func (r *recipeRepo) List(query string, pageNumber, pageSize int, order string) ([]models.Recipe, error) {
+	offset := 0
+	stmt := `SELECT id, title, description, created FROM recipes `
+
+	if query != "" {
+		stmt = stmt + fmt.Sprintf("WHERE LOWER(title) LIKE '%s%s' ", query, "%")
+	}
+
+	if pageNumber > 1 {
+		offset = pageSize * pageNumber
+	}
+
+	stmt = stmt + fmt.Sprintf(`ORDER BY "created" %s `, order)
+	stmt = stmt + fmt.Sprintf(`LIMIT %d OFFSET %d ROWS `, pageSize, offset)
 	rows, err := r.DB.Query(stmt)
 
 	if err != nil {

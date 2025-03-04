@@ -10,5 +10,15 @@
     {{ template "recipeListItem" . }}
   </div>
   {{ end }}
+
+
+  <ul class="pagination">
+    {{ $pageNumber := .Pagination.Page }}
+    {{ range $index, $page := .Pagination.Pages }}
+    <li class="page-item {{ if eq $pageNumber $page }} active {{ end }}">
+      <a href="/recipes/list?page={{ $page }}">{{ $page }}</a>
+    </li>
+    {{ end }}
+  </ul>
 </div>
 {{ end }}

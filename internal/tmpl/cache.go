@@ -20,9 +20,14 @@ func avatarName(name string) string {
 	return strings.ToUpper(name[:2])
 }
 
+func makeSlice(count int) []int {
+	return make([]int, count)
+}
+
 var functions = template.FuncMap{
 	"avatarName": avatarName,
 	"humanDate":  humanDate,
+	"makeSlice":  makeSlice,
 }
 
 func (t *Tmpl) NewCache() error {

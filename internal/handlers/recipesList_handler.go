@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"recipes.krogowski.dev/internal/core"
 	"recipes.krogowski.dev/internal/middleware"
@@ -28,10 +30,39 @@ func NewRecipeListHandler(env core.Env, recipeRepo repository.RecipeRepository) 
 	}
 }
 
+const pageSize = 25
+
 func (h *recipeListHandler) get(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("query")
-	recipes, err := h.recipes.List(query)
+	page := r.URL.Query().Get("page")
+	order := r.URL.Query().Get("order")
 
+	if page == "" {
+		page = "1"
+	}
+
+	if order == "" || (order != "asc" && order != "desc") {
+		order = "asc"
+	}
+
+	pageNumber, err := strconv.Atoi(page)
+	if err != nil {
+		h.serverError(w, r, err)
+		return
+	}
+
+	if pageNumber <= 0 {
+		h.serverError(w, r, errors.New("pageNumber must be at least 1"))
+		return
+	}
+
+	pagination, err := h.recipes.Pagination(pageNumber, pageSize)
+	if err != nil {
+		h.serverError(w, r, err)
+		return
+	}
+
+	recipes, err := h.recipes.List(query, pageNumber, pageSize, order)
 	if err != nil {
 		h.serverError(w, r, err)
 		return
@@ -39,6 +70,8 @@ func (h *recipeListHandler) get(w http.ResponseWriter, r *http.Request) {
 
 	data := h.Tmpl.NewData(r)
 	data.Recipes = recipes
+	data.Pagination = pagination
+
 	h.render(w, r, http.StatusOK, "recipesList.tmpl", data)
 }
 
