@@ -14,7 +14,6 @@ type IngredientRepository interface {
 	Insert(name string) error
 	Search(query string) ([]models.Ingredient, error)
 	List() ([]models.Ingredient, error)
-	A
 }
 
 func NewIngredientRepository(db *sql.DB) IngredientRepository {
