@@ -75,7 +75,10 @@ func New() app {
 	midw := middleware.New(env, userRepo)
 	midw.Init()
 
+	thumbnailServer := http.FileServer(http.Dir("./files"))
+
 	mux.Handle("GET /static/", http.FileServerFS(ui.Files))
+	mux.Handle("GET /files/", http.StripPrefix("/files", thumbnailServer))
 
 	homeHandler := handlers.NewHomeHandler(env, recipeRepo)
 	recipeHandler := handlers.NewRecipeHandler(env, recipeRepo, ingredientsListRepo)

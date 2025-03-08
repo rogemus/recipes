@@ -57,11 +57,11 @@ func (r *recipeRepo) RandomList(limit int) ([]models.Recipe, error) {
 }
 
 func (r *recipeRepo) Get(id int) (models.Recipe, error) {
-	stmt := `SELECT id, title, description, created FROM recipes WHERE id = $1;`
+	stmt := `SELECT id, title, description, created, thumbnail_name, thumbnail_path FROM recipes WHERE id = $1;`
 
 	recipe := models.Recipe{}
 
-	err := r.DB.QueryRow(stmt, id).Scan(&recipe.ID, &recipe.Title, &recipe.Description, &recipe.Created)
+	err := r.DB.QueryRow(stmt, id).Scan(&recipe.ID, &recipe.Title, &recipe.Description, &recipe.Created, &recipe.ThumbnailName, &recipe.ThumbnailPath)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -135,8 +135,8 @@ func (r *recipeRepo) List(query string, pageNumber, pageSize int, order string) 
 
 func (r *recipeRepo) Insert(title, description string, userId int, filename, filepath string) (int, error) {
 	lastInsertId := 0
-	stmt := `INSERT INTO recipes (title, description, user_id) VALUES($1, $2, $3, $4, $5) RETURNING id;`
-	err := r.DB.QueryRow(stmt, title, description, userId, filename, filename).Scan(&lastInsertId)
+	stmt := `INSERT INTO recipes (title, description, user_id, thumbnail_name, thumbnail_path) VALUES($1, $2, $3, $4, $5) RETURNING id;`
+	err := r.DB.QueryRow(stmt, title, description, userId, filename, filepath).Scan(&lastInsertId)
 
 	if err != nil {
 		return 0, err

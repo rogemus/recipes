@@ -1,4 +1,5 @@
 recipies.db
+.DS_Store
 
 files/*.png
 .env
