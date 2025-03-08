@@ -13,7 +13,7 @@ type RecipeRepository interface {
 	Get(id int) (models.Recipe, error)
 	List(query string, pageNumber, pageSize int, order string) ([]models.Recipe, error)
 	RandomList(limit int) ([]models.Recipe, error)
-	Insert(title, description string, userId int) (int, error)
+	Insert(title, description string, userId int, filename, filepath string) (int, error)
 	Search(query string) ([]models.Recipe, error)
 	Pagination(pageNumber, pageSize int) (models.Pagination, error)
 }
@@ -133,10 +133,10 @@ func (r *recipeRepo) List(query string, pageNumber, pageSize int, order string) 
 	return recipes, nil
 }
 
-func (r *recipeRepo) Insert(title, description string, userId int) (int, error) {
+func (r *recipeRepo) Insert(title, description string, userId int, filename, filepath string) (int, error) {
 	lastInsertId := 0
-	stmt := `INSERT INTO recipes (title, description, user_id) VALUES($1, $2, $3) RETURNING id;`
-	err := r.DB.QueryRow(stmt, title, description, userId).Scan(&lastInsertId)
+	stmt := `INSERT INTO recipes (title, description, user_id) VALUES($1, $2, $3, $4, $5) RETURNING id;`
+	err := r.DB.QueryRow(stmt, title, description, userId, filename, filename).Scan(&lastInsertId)
 
 	if err != nil {
 		return 0, err

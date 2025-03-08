@@ -20,6 +20,14 @@ func (f fieldErrors) ErrMinLength(n int) string {
 	return fmt.Sprintf("Value must have at last %d characters", n)
 }
 
+func (f fieldErrors) ErrFileToBig() string {
+	return "File to big"
+}
+
+func (f fieldErrors) ErrFileNotAllowed(allowed string) string {
+	return fmt.Sprintf("File not allowed. Only %s are allowed", allowed)
+}
+
 func (f fieldErrors) ErrPassNotSame() string {
 	return "Password does not match"
 }

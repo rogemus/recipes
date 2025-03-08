@@ -3,7 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"os"
+	"path/filepath"
+	"time"
 
 	"recipes.krogowski.dev/internal/consts"
 	"recipes.krogowski.dev/internal/core"
@@ -37,30 +42,45 @@ func NewRecipeCreateHandler(
 }
 
 type recipieCreateForm struct {
-	Title       string
-	Description string
-	Ingredients []string
-	Units       []string
-	Amount      []string
+	Title         string
+	Description   string
+	Ingredients   []string
+	Units         []string
+	Amount        []string
+	ThumbnailFile multipart.File
 	validator.Validator
 }
 
+// 3 MB
+const MAX_UPLOAD_SIZE = 3 << 20
+
 func (h *recipeCreateHandler) post(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
+	r.Body = http.MaxBytesReader(w, r.Body, MAX_UPLOAD_SIZE)
+
+	form := recipieCreateForm{}
+
+	if err := r.ParseMultipartForm(MAX_UPLOAD_SIZE); err != nil {
+		form.AddFieldError("thumbnailFile", validator.FieldErr.ErrFileToBig())
+	}
+
+	form.Title = r.PostForm.Get("title")
+	form.Description = r.PostForm.Get("description")
+	form.Units = r.PostForm["unit_id"]
+	form.Amount = r.PostForm["amount"]
+	form.Ingredients = r.PostForm["ingredient_id"]
+
+	file, fileHeader, err := r.FormFile("thumbnailFile")
 	if err != nil {
-		// bad request
+		// cannot retrieve file
 		h.serverError(w, r, err)
 		return
 	}
+	defer file.Close()
 
-	form := recipieCreateForm{
-		Title:       r.PostForm.Get("title"),
-		Description: r.PostForm.Get("description"),
-		Units:       r.PostForm["unit_id"],
-		Amount:      r.PostForm["amount"],
-		Ingredients: r.PostForm["ingredient_id"],
-	}
+	form.ThumbnailFile = file
 
+	form.CheckField(validator.FileNotBlank(*fileHeader), "thumbnailFile", validator.FieldErr.ErrNotBlank())
+	form.CheckField(validator.FileTypeNotAllowed(*fileHeader), "thumbnailFile", validator.FieldErr.ErrFileNotAllowed("png, jpeg"))
 	form.CheckField(validator.NotBlank(form.Title), "title", validator.FieldErr.ErrNotBlank())
 	form.CheckField(validator.NotBlank(form.Description), "description", validator.FieldErr.ErrNotBlank())
 
@@ -98,8 +118,30 @@ func (h *recipeCreateHandler) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	filename := fmt.Sprintf("%s_%d_%s", form.Title, time.Now().UnixNano(), fileHeader.Filename)
+	uploadDir := "./files"
+
+	filepath := filepath.Join(uploadDir, filename)
+
+	dst, err := os.Create(filepath)
+	if err != nil {
+		// cannot save file
+		h.serverError(w, r, err)
+		return
+	}
+	defer dst.Close()
+
+	filesize, err := io.Copy(dst, file)
+	if err != nil {
+		// cannot copy file
+		h.serverError(w, r, err)
+		return
+	}
+
+	h.Logger.Info("Saved path", "filename", filename, "filepath", filepath, "fileSize", filesize)
+
 	userId := h.Session.GetUserId(r)
-	id, err := h.recipes.Insert(form.Title, form.Description, userId)
+	id, err := h.recipes.Insert(form.Title, form.Description, userId, filename, filepath)
 
 	if err != nil {
 		h.serverError(w, r, err)

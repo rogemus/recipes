@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"mime/multipart"
 	"regexp"
 	"strings"
 	"unicode/utf8"
@@ -43,6 +44,19 @@ func (v *Validator) CheckField(isOk bool, key, message string) {
 	if !isOk {
 		v.AddFieldError(key, message)
 	}
+}
+
+func FileNotBlank(fileHeader multipart.FileHeader) bool {
+	return fileHeader.Size != 0
+}
+
+func FileTypeNotAllowed(fileHeader multipart.FileHeader) bool {
+	allowedTypes := map[string]bool{
+		"image/jpeg": true,
+		"image/png":  true,
+	}
+
+	return allowedTypes[fileHeader.Header.Get("Content-Type")]
 }
 
 func NotBlank(value string) bool {

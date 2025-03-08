@@ -4,8 +4,11 @@
 
 <h1>Create recipe</h1>
 
-<form action="/recipes/create" method="post">
+<form action="/recipes/create" method="post" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+  <input type="file" name="thumbnailFile">
+
   <div class="form-group {{ with .Form.FieldErrors.title }} has-error {{ end }}">
     <label class="form-label" for="title">Title</label>
     <input class="form-input" type="text" id="title" name="title" placeholder="Title">
