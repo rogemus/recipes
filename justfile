@@ -1,3 +1,6 @@
+default:
+  just --list
+
 # Run all tests
 test:
 	go test ./test/... -v
@@ -15,7 +18,7 @@ start:
 	go run ./cmd/web/
 
 # Run migration
-db ACTION N=(""):
+db ACTION *N:
 	migrate -path=./db/migrations -database=${RECIPES_DB_DSN} {{ACTION}} {{N}}
 
 # Create new migration
