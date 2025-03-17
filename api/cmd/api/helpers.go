@@ -6,10 +6,20 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 type envelope map[string]any
+
+var (
+	ErrBadJSON            = errors.New("body cantains badly-formated JSON")
+	ErrEmptyJSON          = errors.New("body must not be empty")
+	ErrMultipleValuesJSON = errors.New("body must only contain a single JSON value")
+	ErrInvalidIdParam     = errors.New("invalid id parameter")
+)
 
 func (app *application) writeJSON(w http.ResponseWriter, status int, data envelope, headers http.Header) error {
 	js, err := json.MarshalIndent(data, "", "\t")
@@ -26,12 +36,6 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data envelo
 	w.Write(js)
 	return nil
 }
-
-var (
-	ErrBadJSON            = errors.New("body cantains badly-formated JSON")
-	ErrEmptyJSON          = errors.New("body must not be empty")
-	ErrMultipleValuesJSON = errors.New("body must only contain a single JSON value")
-)
 
 func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst any) error {
 	r.Body = http.MaxBytesReader(w, r.Body, 1_048_576)
@@ -81,4 +85,15 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst any
 	}
 
 	return nil
+}
+
+func (app *application) readIDParam(r *http.Request) (int64, error) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
+	if err != nil || id < 1 {
+		return 0, ErrInvalidIdParam
+	}
+
+	return id, nil
 }

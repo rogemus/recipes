@@ -1,10 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
 	"recipes.krogowski.dev/api/internal/models"
+	repository "recipes.krogowski.dev/api/internal/repositories"
 	"recipes.krogowski.dev/api/internal/validator"
 )
 
@@ -46,4 +48,24 @@ func (app *application) createRecipeHandler(w http.ResponseWriter, r *http.Reque
 }
 
 func (app *application) getRecipeHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil || id < 1 {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	recipe, err := app.repos.Recipes.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, repository.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	if err := app.writeJSON(w, http.StatusOK, envelope{"recipe": recipe}, nil); err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
 }
