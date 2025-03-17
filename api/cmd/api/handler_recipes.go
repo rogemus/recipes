@@ -69,3 +69,20 @@ func (app *application) getRecipeHandler(w http.ResponseWriter, r *http.Request)
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *application) deleteRecipeHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil || id < 1 {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if err = app.repos.Recipes.Delete(id); err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if err = app.writeJSON(w, http.StatusOK, envelope{"msg": "recipe successfully deleted"}, nil); err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}

@@ -65,6 +65,35 @@ func (r RecipeRepo) Insert(recipe *models.Recipe) error {
 	)
 }
 
+func (r RecipeRepo) Delete(recipeID int64) error {
+	if recipeID < 1 {
+		return ErrRecordNotFound
+	}
+
+	query := `
+    DELETE FROM recipes
+    WHERE id = $1;`
+
+	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
+	defer cancel()
+
+	result, err := r.DB.ExecContext(ctx, query, recipeID)
+	if err != nil {
+		return err
+	}
+
+	rowAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowAffected == 0 {
+		return ErrRecordNotFound
+	}
+
+	return nil
+}
+
 func (r RecipeRepo) Update(recipe *models.Recipe) error {
 	return nil
 }

@@ -16,6 +16,7 @@ func (app *application) routes() http.Handler {
 
 	router.HandlerFunc(http.MethodPost, "/v1/recipes", app.createRecipeHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/recipes/:id", app.getRecipeHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/recipes/:id", app.getRecipeHandler)
 
 	return router
 }
