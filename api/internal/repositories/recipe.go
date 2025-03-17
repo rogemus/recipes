@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/lib/pq"
 	"recipes.krogowski.dev/api/internal/models"
@@ -98,6 +99,51 @@ func (r RecipeRepo) Update(recipe *models.Recipe) error {
 	return nil
 }
 
-func (r RecipeRepo) List() ([]models.Recipe, error) {
-	return nil, nil
+func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe, models.Metadata, error) {
+	query := fmt.Sprintf(`
+    SELECT count(*) OVER(), id, created_at, title, description, steps, version 
+    FROM recipes
+    WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
+    ORDER BY %s %s, id ASC
+    LIMIT $2 OFFSET $3;`, filters.SortColumn(), filters.SortDirection())
+
+	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
+	defer cancel()
+
+	args := []any{title, filters.Limit(), filters.Offset()}
+	rows, err := r.DB.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, models.Metadata{}, err
+	}
+	defer rows.Close()
+
+	totalRecords := 0
+	recipes := []*models.Recipe{}
+
+	for rows.Next() {
+		var recipe models.Recipe
+
+		err := rows.Scan(
+			&totalRecords,
+			&recipe.ID,
+			&recipe.CreatedAt,
+			&recipe.Title,
+			&recipe.Description,
+			pq.Array(&recipe.Steps),
+			&recipe.Version,
+		)
+		if err != nil {
+			return nil, models.Metadata{}, err
+		}
+
+		recipes = append(recipes, &recipe)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, models.Metadata{}, err
+	}
+
+	metadata := models.CalculateMetadata(totalRecords, filters.Page, filters.PageSize)
+
+	return recipes, metadata, nil
 }

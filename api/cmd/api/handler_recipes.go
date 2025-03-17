@@ -86,3 +86,34 @@ func (app *application) deleteRecipeHandler(w http.ResponseWriter, r *http.Reque
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *application) listRecipeHandler(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Title string
+		models.Filters
+	}
+
+	v := validator.New()
+	qs := r.URL.Query()
+
+	input.Title = app.readString(qs, "title", "")
+	input.Filters.Page = app.readInt(qs, "page", 1, v)
+	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)
+	input.Filters.Sort = app.readString(qs, "sort", "id")
+	input.Filters.SortSafelist = []string{"id", "title", "-id", "-title"}
+
+	if models.ValidateFilters(v, input.Filters); !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	recipes, metadata, err := app.repos.Recipes.List(input.Title, input.Filters)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if err = app.writeJSON(w, http.StatusOK, envelope{"recipes": recipes, "metadata": metadata}, nil); err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
