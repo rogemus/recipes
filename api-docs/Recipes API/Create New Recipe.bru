@@ -1,0 +1,35 @@
+meta {
+  name: Create New Recipe
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/v1/recipes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Incididunt consectetur anim minim.",
+    "description": "Ullamco commodo pariatur incididunt officia dolore consectetur aute aliquip enim enim. Cupidatat exercitation enim laborum nisi eiusmod reprehenderit eiusmod. Irure eiusmod irure minim consectetur eiusmod Lorem id reprehenderit id. Dolore occaecat laborum sint quis fugiat. Incididunt occaecat esse excepteur anim. Duis ullamco nulla reprehenderit mollit sint dolore et ea sunt aliqua nostrud aliquip deserunt reprehenderit. ",
+    "steps": [
+      "Sunt elit elit nostrud reprehenderit commodo.",
+      "Labore officia aliqua dolore.",
+      "Aliqua veniam aliqua cupidatat eu labore duis ex in laborum fugiat adipisicing est."
+    ],
+    "ingredients": [
+      {
+        "ingredient_id": 1,
+        "unit_id": 2,
+        "amount": 1.0
+      },
+      {
+        "ingredient_id": 4,
+        "unit_id": 5,
+        "amount": 1.5
+      }
+    ]
+  }
+}

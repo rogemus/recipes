@@ -28,9 +28,8 @@ func (r *UnitRepo) List() ([]*models.Unit, error) {
 
 	for rows.Next() {
 		var unit models.Unit
-		err = rows.Scan(&unit.ID, &unit.Name)
 
-		if err != nil {
+		if err = rows.Scan(&unit.ID, &unit.Name); err != nil {
 			return nil, err
 		}
 

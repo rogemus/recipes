@@ -15,6 +15,11 @@ func (app *application) createRecipeHandler(w http.ResponseWriter, r *http.Reque
 		Title       string   `json:"title"`
 		Description string   `json:"description"`
 		Steps       []string `json:"steps"`
+		Ingredients []struct {
+			IngredientID int64   `json:"ingredient_id"`
+			UnitID       int64   `json:"unit_id"`
+			Amount       float32 `json:"amount"`
+		} `json:"ingredients"`
 	}
 
 	if err := app.readJSON(w, r, &input); err != nil {
@@ -28,8 +33,23 @@ func (app *application) createRecipeHandler(w http.ResponseWriter, r *http.Reque
 		Steps:       input.Steps,
 		Description: input.Description,
 	}
+	var ingredients []*models.IngredientListItem
 
-	if models.ValidateRecipe(v, recipe); !v.Valid() {
+	for _, item := range input.Ingredients {
+		ingredient := models.IngredientListItem{
+			IngredientID: item.IngredientID,
+			UnitID:       item.UnitID,
+			Amount:       item.Amount,
+			RecipeID:     recipe.ID,
+		}
+
+		ingredients = append(ingredients, &ingredient)
+	}
+
+	models.ValidateRecipe(v, recipe)
+	models.ValidateIngredientList(v, ingredients)
+
+	if !v.Valid() {
 		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
@@ -39,10 +59,21 @@ func (app *application) createRecipeHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	if err := app.repos.IngredientLists.Insert(ingredients, recipe.ID); err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	list, err := app.repos.IngredientLists.List(recipe.ID)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
 	headers := make(http.Header)
 	headers.Set("Location", fmt.Sprintf("/v1/recipes/%d", recipe.ID))
 
-	if err := app.writeJSON(w, http.StatusCreated, envelope{"recipe": recipe}, headers); err != nil {
+	if err := app.writeJSON(w, http.StatusCreated, envelope{"recipe": recipe, "ingredients": list}, headers); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
@@ -65,7 +96,13 @@ func (app *application) getRecipeHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if err := app.writeJSON(w, http.StatusOK, envelope{"recipe": recipe}, nil); err != nil {
+	ingredients, err := app.repos.IngredientLists.List(id)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if err := app.writeJSON(w, http.StatusOK, envelope{"recipe": recipe, "ingredients": ingredients}, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }

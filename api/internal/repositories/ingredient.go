@@ -47,11 +47,15 @@ func (m *IngredientRepo) Search(searchQuery string) ([]*models.Ingredient, error
 	for rows.Next() {
 		var ingredient models.Ingredient
 
-		err = rows.Scan(&ingredient.ID, &ingredient.Name)
-		if err != nil {
+		if err = rows.Scan(&ingredient.ID, &ingredient.Name); err != nil {
 			return nil, err
 		}
+
 		ingredients = append(ingredients, &ingredient)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return ingredients, nil

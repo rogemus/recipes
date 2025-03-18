@@ -16,6 +16,7 @@ type Repos struct {
 var (
 	ErrRecordNotFound = errors.New("record not found")
 	ErrEditConflict   = errors.New("edit conflict")
+	ErrNoDataToInsert = errors.New("no data to insert")
 )
 
 const DBRequestTimeout = 3 * time.Second
