@@ -7,10 +7,11 @@ import (
 )
 
 type Repos struct {
+	IngredientLists IngredientListRepo
+	Ingredients     IngredientRepo
 	Recipes         RecipeRepo
 	Units           UnitRepo
-	Ingredients     IngredientRepo
-	IngredientLists IngredientListRepo
+	Users           UserRepo
 }
 
 var (
@@ -23,9 +24,10 @@ const DBRequestTimeout = 3 * time.Second
 
 func New(db *sql.DB) Repos {
 	return Repos{
+		IngredientLists: IngredientListRepo{DB: db},
+		Ingredients:     IngredientRepo{DB: db},
 		Recipes:         RecipeRepo{DB: db},
 		Units:           UnitRepo{DB: db},
-		Ingredients:     IngredientRepo{DB: db},
-		IngredientLists: IngredientListRepo{DB: db},
+		Users:           UserRepo{DB: db},
 	}
 }

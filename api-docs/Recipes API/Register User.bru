@@ -1,0 +1,19 @@
+meta {
+  name: Register User
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BASE_URL}}/v1/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Alice Smith",
+    "email": "alice@example.com",
+    "password": "pa55word"
+  }
+}
