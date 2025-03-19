@@ -1,0 +1,1 @@
+ALTER TABLE recipes ADD user_id bigint REFERENCES users ON DELETE CASCADE

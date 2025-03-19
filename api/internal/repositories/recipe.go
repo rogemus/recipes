@@ -20,8 +20,20 @@ func (r RecipeRepo) Get(recipeID int64) (*models.Recipe, error) {
 	}
 
 	query := `
-    SELECT id, created_at, title, description, steps, version FROM recipes
-    WHERE id = $1;`
+    SELECT
+      recipes.id,
+      recipes.created_at,
+      recipes.title,
+      recipes.description,
+      recipes.steps,
+      recipes.version,
+      users.id,
+      users.name
+    FROM
+      recipes
+      LEFT JOIN users ON recipes.id = users.id
+    WHERE
+      recipes.id = $1;`
 	var recipe models.Recipe
 
 	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
@@ -34,6 +46,8 @@ func (r RecipeRepo) Get(recipeID int64) (*models.Recipe, error) {
 		&recipe.Description,
 		pq.Array(&recipe.Steps),
 		&recipe.Version,
+		&recipe.UserID,
+		&recipe.UserName,
 	)
 
 	if err != nil {
@@ -50,14 +64,14 @@ func (r RecipeRepo) Get(recipeID int64) (*models.Recipe, error) {
 
 func (r RecipeRepo) Insert(recipe *models.Recipe) error {
 	query := `
-    INSERT INTO recipes (title, description, steps)
-    VALUES ($1, $2, $3)
+    INSERT INTO recipes (title, description, steps, user_id)
+    VALUES ($1, $2, $3, $4)
     RETURNING id, created_at, version;`
 
 	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
 	defer cancel()
 
-	args := []any{recipe.Title, recipe.Description, pq.Array(recipe.Steps)}
+	args := []any{recipe.Title, recipe.Description, pq.Array(recipe.Steps), recipe.UserID}
 
 	return r.DB.QueryRowContext(ctx, query, args...).Scan(
 		&recipe.ID,
@@ -66,19 +80,19 @@ func (r RecipeRepo) Insert(recipe *models.Recipe) error {
 	)
 }
 
-func (r RecipeRepo) Delete(recipeID int64) error {
+func (r RecipeRepo) Delete(recipeID int64, userID int64) error {
 	if recipeID < 1 {
 		return ErrRecordNotFound
 	}
 
 	query := `
     DELETE FROM recipes
-    WHERE id = $1;`
+    WHERE id = $1 AND user_id = $2`
 
 	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
 	defer cancel()
 
-	result, err := r.DB.ExecContext(ctx, query, recipeID)
+	result, err := r.DB.ExecContext(ctx, query, recipeID, userID)
 	if err != nil {
 		return err
 	}
@@ -101,10 +115,21 @@ func (r RecipeRepo) Update(recipe *models.Recipe) error {
 
 func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe, models.Metadata, error) {
 	query := fmt.Sprintf(`
-    SELECT count(*) OVER(), id, created_at, title, description, steps, version 
-    FROM recipes
+    SELECT
+      count(*) OVER (),
+      recipes.id,
+      recipes.created_at,
+      recipes.title,
+      recipes.description,
+      recipes.steps,
+      recipes.version,
+      users.id,
+      users.name
+    FROM
+      recipes
+      LEFT JOIN users ON recipes.id = users.id
     WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
-    ORDER BY %s %s, id ASC
+    ORDER BY % s % s, id ASC
     LIMIT $2 OFFSET $3;`, filters.SortColumn(), filters.SortDirection())
 
 	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)

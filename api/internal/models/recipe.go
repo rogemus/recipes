@@ -13,6 +13,8 @@ type Recipe struct {
 	Description string    `json:"description"`
 	Steps       []string  `json:"steps"`
 	Version     int       `json:"version"`
+	UserID      int64     `json:"user_id"`
+	UserName    string    `json:"user_name"`
 }
 
 func ValidateRecipe(v *validator.Validator, recipe *Recipe) {

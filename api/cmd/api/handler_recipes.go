@@ -54,6 +54,10 @@ func (app *application) createRecipeHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	user := app.contextGetUser(r)
+	recipe.UserID = user.ID
+	recipe.UserName = user.Name
+
 	if err := app.repos.Recipes.Insert(recipe); err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -114,7 +118,9 @@ func (app *application) deleteRecipeHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err = app.repos.Recipes.Delete(id); err != nil {
+	user := app.contextGetUser(r)
+
+	if err = app.repos.Recipes.Delete(id, user.ID); err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
