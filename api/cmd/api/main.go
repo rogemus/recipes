@@ -12,9 +12,12 @@ import (
 const version = "1.0.0"
 
 type config struct {
-	port int
-	env  string
-	db   struct {
+	port   int
+	env    string
+	tokens struct {
+		activationTokenDuration time.Duration
+	}
+	db struct {
 		dsn          string
 		maxOpenConns int
 		maxIdleConns int
@@ -32,7 +35,6 @@ func main() {
 	var cfg config
 
 	/* Flags */
-	/** DATABASE **/
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Enviroment (development|stagging|production)")
 
@@ -41,8 +43,9 @@ func main() {
 	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "PostgreSQL max idle connections")
 	flag.DurationVar(&cfg.db.maxIdleTime, "db-max-idle-time", 15*time.Minute, "PostgreSQL max connection idle time")
 
-	flag.Parse()
+	flag.DurationVar(&cfg.tokens.activationTokenDuration, "activation-token-duration", 3*24*time.Hour, "How long token for user activation is valid")
 
+	flag.Parse()
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	db, err := newDB(cfg)

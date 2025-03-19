@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"time"
 
 	"recipes.krogowski.dev/api/internal/models"
 )
@@ -12,10 +11,6 @@ import (
 type UserRepo struct {
 	DB *sql.DB
 }
-
-var (
-	ErrDuplicateEmail = errors.New("duplicate email")
-)
 
 func (r *UserRepo) Insert(user *models.User) error {
 	query := `
@@ -25,7 +20,7 @@ func (r *UserRepo) Insert(user *models.User) error {
 
 	args := []any{user.Name, user.Email, user.Password.Hash, user.Activated}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
 	defer cancel()
 
 	err := r.DB.QueryRowContext(ctx, query, args...).Scan(&user.ID, &user.CreatedAt, &user.Version)
@@ -49,7 +44,7 @@ func (r *UserRepo) GerByEmail(email string) (*models.User, error) {
 
 	var user models.User
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
 	defer cancel()
 
 	err := r.DB.QueryRowContext(ctx, query, email).Scan(

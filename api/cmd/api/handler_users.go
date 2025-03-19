@@ -50,6 +50,13 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	// TODO: send token to user
+	_, err := app.repos.Tokens.New(user.ID, app.config.tokens.activationTokenDuration, models.ScopeActivation)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
 	if err := app.writeJSON(w, http.StatusCreated, envelope{"user": user}, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
