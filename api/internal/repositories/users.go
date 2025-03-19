@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"crypto/internal/fips140/sha256"
+	"crypto/sha256"
 	"database/sql"
 	"errors"
 	"time"

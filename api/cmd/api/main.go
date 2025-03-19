@@ -15,7 +15,8 @@ type config struct {
 	port   int
 	env    string
 	tokens struct {
-		activationTokenDuration time.Duration
+		activationTokenDuration     time.Duration
+		authenticationTokenDuration time.Duration
 	}
 	db struct {
 		dsn          string
@@ -44,6 +45,7 @@ func main() {
 	flag.DurationVar(&cfg.db.maxIdleTime, "db-max-idle-time", 15*time.Minute, "PostgreSQL max connection idle time")
 
 	flag.DurationVar(&cfg.tokens.activationTokenDuration, "activation-token-duration", 3*24*time.Hour, "How long token for user activation is valid")
+	flag.DurationVar(&cfg.tokens.authenticationTokenDuration, "authentication-token-duration", 24*time.Hour, "How long token for user login is valid")
 
 	flag.Parse()
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
