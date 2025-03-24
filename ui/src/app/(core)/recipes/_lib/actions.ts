@@ -35,9 +35,10 @@ export const getRecipes = async (
 
     if (response.status === 200) return { data: json };
 
-    return { error: json };
+    return { ...json };
   } catch (e) {
-    console.error("Error: Unable to fetch recipes");
-    return { error: { msg: String(e) } };
+    const msg = "Error: Unable to fetch recipes";
+    console.error(msg, e);
+    return { error: msg };
   }
 };

@@ -1,8 +1,7 @@
-import { FC } from "react";
 import { RecipeDetailsPageProps } from "./page.types";
 import { getRecipeDetails } from "./_lib/actions";
 
-const Page: FC<RecipeDetailsPageProps> = async ({ params }) => {
+const Page: RecipeDetailsPageProps = async ({ params }) => {
   const queryParams = await params;
   const id = queryParams.id;
 

@@ -1,6 +1,4 @@
-export interface Response<Body = {}> {
+export interface Response<Body = unknown, Error = unknown> {
   data?: Body;
-  error?: {
-    msg: string;
-  };
+  error?: Error;
 }

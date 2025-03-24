@@ -15,15 +15,19 @@ export const getRecipeDetails = async (
 ): Promise<RecipeDetailsResponse> => {
   const url = `${API_PATH}/${id}`;
 
+
   try {
     const response = await fetch(url);
     const json = await response.json();
 
-    if (response.status === 200) return { data: json };
+    if (response.status === 200) {
+      return { data: json };
+    }
 
-    return { error: json };
+    return { ...json };
   } catch (e) {
-    console.error("Error: Unable to fetch recipe with id: ", id);
-    return { error: { msg: String(e) } };
+    const msg = `Error: Unable to fetch recipe with id: ${id}`;
+    console.error(msg, e);
+    return { error: msg };
   }
 };
