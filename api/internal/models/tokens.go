@@ -5,7 +5,7 @@ import (
 	"crypto/sha256"
 	"time"
 
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 const (

@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type IngredientList struct {

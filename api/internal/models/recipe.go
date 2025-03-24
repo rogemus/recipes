@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type Recipe struct {

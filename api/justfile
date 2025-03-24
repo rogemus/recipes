@@ -7,7 +7,7 @@ test:
 
 # Run api
 run:
-  go run ./api/cmd/api
+  go run ./cmd/api
 
 # Run dev server with livereload
 dev:
@@ -15,8 +15,8 @@ dev:
 
 # Run migration
 db ACTION *N:
-	migrate -path=./api/migrations -database=${RECIPES_DB_DSN} {{ACTION}} {{N}}
+	migrate -path=./migrations -database=${RECIPES_DB_DSN} {{ACTION}} {{N}}
 
 # Create new migration
 dbCreate MIGRATION_FILE:
-  migrate create -ext sql -dir api/migrations -seq {{MIGRATION_FILE}}
+  migrate create -ext sql -dir ./migrations -seq {{MIGRATION_FILE}}

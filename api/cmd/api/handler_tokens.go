@@ -4,9 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"recipes.krogowski.dev/api/internal/models"
-	repository "recipes.krogowski.dev/api/internal/repositories"
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/models"
+	repository "recipes.krogowski.dev/internal/repositories"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 func (app *application) createAuthenticationTokenHandler(w http.ResponseWriter, r *http.Request) {

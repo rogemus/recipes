@@ -7,7 +7,7 @@ import (
 	"errors"
 	"time"
 
-	"recipes.krogowski.dev/api/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type UserRepo struct {

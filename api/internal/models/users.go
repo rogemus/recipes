@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type User struct {

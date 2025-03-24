@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"recipes.krogowski.dev/api/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type contextKey string

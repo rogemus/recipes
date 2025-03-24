@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/julienschmidt/httprouter"
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type envelope map[string]any

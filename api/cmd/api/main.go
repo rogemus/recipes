@@ -6,7 +6,8 @@ import (
 	"os"
 	"time"
 
-	repository "recipes.krogowski.dev/api/internal/repositories"
+	"github.com/joho/godotenv"
+	repository "recipes.krogowski.dev/internal/repositories"
 )
 
 const version = "1.0.0"
@@ -33,10 +34,18 @@ type application struct {
 }
 
 func main() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	err := godotenv.Load()
+	if err != nil {
+		logger.Error("Error loading .env file")
+		os.Exit(1)
+		return
+	}
+
 	var cfg config
 
 	/* Flags */
-	flag.IntVar(&cfg.port, "port", 4000, "API server port")
+	flag.IntVar(&cfg.port, "port", 4345, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Enviroment (development|stagging|production)")
 
 	flag.StringVar(&cfg.db.dsn, "db-dsn", os.Getenv("RECIPES_DB_DSN"), "PostgreSQL DSN")
@@ -48,7 +57,6 @@ func main() {
 	flag.DurationVar(&cfg.tokens.authenticationTokenDuration, "authentication-token-duration", 24*time.Hour, "How long token for user login is valid")
 
 	flag.Parse()
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	db, err := newDB(cfg)
 	if err != nil {

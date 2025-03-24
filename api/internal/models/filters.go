@@ -3,7 +3,7 @@ package models
 import (
 	"strings"
 
-	"recipes.krogowski.dev/api/internal/validator"
+	"recipes.krogowski.dev/internal/validator"
 )
 
 type Filters struct {

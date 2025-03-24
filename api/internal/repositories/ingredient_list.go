@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"recipes.krogowski.dev/api/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type IngredientListRepo struct {

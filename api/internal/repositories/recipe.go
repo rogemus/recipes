@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/lib/pq"
-	"recipes.krogowski.dev/api/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type RecipeRepo struct {
@@ -129,7 +129,7 @@ func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe
       recipes
       LEFT JOIN users ON recipes.id = users.id
     WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
-    ORDER BY % s % s, id ASC
+    ORDER BY recipes.%s %s, recipes.id ASC
     LIMIT $2 OFFSET $3;`, filters.SortColumn(), filters.SortDirection())
 
 	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
@@ -156,6 +156,8 @@ func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe
 			&recipe.Description,
 			pq.Array(&recipe.Steps),
 			&recipe.Version,
+      &recipe.UserID,
+      &recipe.UserName,
 		)
 		if err != nil {
 			return nil, models.Metadata{}, err

@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"time"
 
-	"recipes.krogowski.dev/api/internal/models"
+	"recipes.krogowski.dev/internal/models"
 )
 
 type TokenRepo struct {
