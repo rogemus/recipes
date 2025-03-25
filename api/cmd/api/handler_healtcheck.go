@@ -3,15 +3,16 @@ package main
 import "net/http"
 
 func (app *application) healtcheckHandler(w http.ResponseWriter, r *http.Request) {
-	data := envelope{
-		"status": "available",
-		"system_info": map[string]string{
-			"environment": app.config.env,
-			"version":     version,
-		},
+	response := envelope{
+		"data": map[string]any{
+			"status": "available",
+			"system_info": map[string]string{
+				"environment": app.config.env,
+				"version":     version,
+			}},
 	}
 
-	err := app.writeJSON(w, http.StatusOK, data, nil)
+	err := app.writeJSON(w, http.StatusOK, response, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

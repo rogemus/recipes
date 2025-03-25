@@ -77,7 +77,11 @@ func (app *application) createRecipeHandler(w http.ResponseWriter, r *http.Reque
 	headers := make(http.Header)
 	headers.Set("Location", fmt.Sprintf("/v1/recipes/%d", recipe.ID))
 
-	if err := app.writeJSON(w, http.StatusCreated, envelope{"recipe": recipe, "ingredients": list}, headers); err != nil {
+	response := envelope{"data": map[string]any{
+		"recipe":      recipe,
+		"ingredients": list,
+	}}
+	if err := app.writeJSON(w, http.StatusCreated, response, headers); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
@@ -106,7 +110,11 @@ func (app *application) getRecipeHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if err := app.writeJSON(w, http.StatusOK, envelope{"recipe": recipe, "ingredients": ingredients}, nil); err != nil {
+	response := envelope{"data": map[string]any{
+		"recipe":      recipe,
+		"ingredients": ingredients,
+	}}
+	if err := app.writeJSON(w, http.StatusOK, response, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
@@ -125,7 +133,10 @@ func (app *application) deleteRecipeHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err = app.writeJSON(w, http.StatusOK, envelope{"msg": "recipe successfully deleted"}, nil); err != nil {
+	response := envelope{"data": map[string]any{
+		"msg": "recipe successfully deleted",
+	}}
+	if err = app.writeJSON(w, http.StatusOK, response, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
@@ -156,7 +167,11 @@ func (app *application) listRecipeHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if err = app.writeJSON(w, http.StatusOK, envelope{"recipes": recipes, "metadata": metadata}, nil); err != nil {
+	response := envelope{"data": map[string]any{
+		"recipes":  recipes,
+		"metadata": metadata,
+	}}
+	if err = app.writeJSON(w, http.StatusOK, response, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }

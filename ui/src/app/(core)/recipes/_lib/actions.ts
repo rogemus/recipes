@@ -1,14 +1,17 @@
 "use server";
 
-import { Metadata, Recipe, Response, SearchParams } from "@/app/_models";
+import { Metadata, Recipe, SearchParams } from "@/app/_models";
 
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/recipes`;
 
-type RecipesResponse = Response<{
-  recipes: Recipe[];
-  metadata: Metadata;
-}>;
+type RecipesResponse = {
+  data?: {
+    recipes: Recipe[];
+    metadata: Metadata;
+  };
+  error: string;
+};
 
 export const getRecipes = async (
   searchParams: SearchParams,
@@ -31,11 +34,8 @@ export const getRecipes = async (
 
   try {
     const response = await fetch(url);
-    const json = await response.json();
-
-    if (response.status === 200) return { data: json };
-
-    return { ...json };
+    const json = (await response.json()) as RecipesResponse;
+    return json;
   } catch (e) {
     const msg = "Error: Unable to fetch recipes";
     console.error(msg, e);

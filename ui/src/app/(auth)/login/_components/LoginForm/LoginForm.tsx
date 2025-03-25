@@ -29,7 +29,7 @@ const LoginForm = () => {
             id="email"
             placeholder="Email..."
             name="email"
-            value={"tom@example.com"}
+            defaultValue={"tom@example.com"}
           />
           {state?.error?.email && <p>{state?.error?.email}</p>}
         </div>
@@ -41,7 +41,7 @@ const LoginForm = () => {
             id="password"
             placeholder="Password..."
             name="password"
-            value="pa55word"
+            defaultValue="pa55word"
           />
 
           {state?.error?.password && <p>{state?.error?.password}</p>}

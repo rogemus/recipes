@@ -59,7 +59,10 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 
 	app.logger.Info("User activation token", "token", token)
 
-	if err := app.writeJSON(w, http.StatusCreated, envelope{"user": user}, nil); err != nil {
+	response := envelope{"data": map[string]any{
+		"user": user,
+	}}
+	if err := app.writeJSON(w, http.StatusCreated, response, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
@@ -109,7 +112,10 @@ func (app *application) activateUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err := app.writeJSON(w, http.StatusCreated, envelope{"user": user}, nil); err != nil {
+	response := envelope{"data": map[string]any{
+		"user": user,
+	}}
+	if err := app.writeJSON(w, http.StatusCreated, response, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
