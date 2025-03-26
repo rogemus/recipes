@@ -1,5 +1,6 @@
 "use server";
 
+import { Token } from "@/_models";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -8,10 +9,7 @@ const API_PATH = `${BASE_API_PATH}/v1/tokens/authentication`;
 
 type SignInResponse = {
   data?: {
-    authentication_token: {
-      token: string;
-      expiry: string;
-    };
+    authentication_token: Token;
   };
   error?: string | { password: string; email: string };
 };
