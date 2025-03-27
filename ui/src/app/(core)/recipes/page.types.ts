@@ -1,3 +1,3 @@
-import { Page } from "@/app/_models";
+import { Page } from "@/_models";
 
 export type RecipesListProps = Page & {};

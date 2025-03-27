@@ -30,7 +30,7 @@ export const getRecipes = async (
   }
 
   const url =
-    urlParams.size > 0 ? `${API_PATH}?=${urlParams.toString()}` : API_PATH;
+    urlParams.size > 0 ? `${API_PATH}?${urlParams.toString()}` : API_PATH;
 
   try {
     const response = await fetch(url);

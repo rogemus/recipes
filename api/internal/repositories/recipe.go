@@ -127,7 +127,7 @@ func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe
       users.name
     FROM
       recipes
-      LEFT JOIN users ON recipes.id = users.id
+      LEFT JOIN users ON recipes.user_id = users.id
     WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
     ORDER BY recipes.%s %s, recipes.id ASC
     LIMIT $2 OFFSET $3;`, filters.SortColumn(), filters.SortDirection())
@@ -156,8 +156,8 @@ func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe
 			&recipe.Description,
 			pq.Array(&recipe.Steps),
 			&recipe.Version,
-      &recipe.UserID,
-      &recipe.UserName,
+			&recipe.UserID,
+			&recipe.UserName,
 		)
 		if err != nil {
 			return nil, models.Metadata{}, err
