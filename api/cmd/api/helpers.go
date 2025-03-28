@@ -24,7 +24,7 @@ var (
 )
 
 func (app *application) writeJSON(w http.ResponseWriter, status int, data envelope, headers http.Header) error {
-	js, err := json.MarshalIndent(data, "", "\t")
+	js, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
@@ -107,15 +107,6 @@ func (app *application) readString(qs url.Values, key string, defaultValue strin
 	}
 
 	return s
-}
-
-func (app *application) readCSV(qs url.Values, key string, defaultValue []string) []string {
-	csv := qs.Get(key)
-	if csv == "" {
-		return defaultValue
-	}
-
-	return strings.Split(csv, ",")
 }
 
 func (app *application) readInt(qs url.Values, key string, defaultValue int, v *validator.Validator) int {

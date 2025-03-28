@@ -2,21 +2,31 @@ _default:
   just --list
 
 # Run all tests
+[group('tests')]
 test:
-	go test ./test/... -v
+	go test ./... -v
+
+# Run all tests with livereload
+[group('tests')]
+test-dev:
+  watchexec --restart --debounce 3sec --exts go just test
 
 # Run api
+[group('app')]
 run:
   go run ./cmd/api
 
 # Run dev server with livereload
+[group('app')]
 dev:
   watchexec --restart --debounce 2sec --exts go just run
 
 # Run migration
+[group('database')]
 db ACTION *N:
 	migrate -path=./migrations -database=${RECIPES_DB_DSN} {{ACTION}} {{N}}
 
 # Create new migration
+[group('database')]
 dbCreate MIGRATION_FILE:
   migrate create -ext sql -dir ./migrations -seq {{MIGRATION_FILE}}
