@@ -1,7 +1,7 @@
 "use server";
 
 import { User } from "@/_models";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/users`;
@@ -53,7 +53,7 @@ export async function register(_: unknown, formData: FormData) {
     const res = await signUp(email, name, password);
 
     if (res.data?.user.id) {
-      return redirect("/login");
+      // return redirect("/login");
     }
 
     return res;
