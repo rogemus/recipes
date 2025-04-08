@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "test:unit": "vitest",
+    "test:e2e": "pnpm exec playwright test",
+    "test:e2e:ui": "pnpm exec playwright test --ui"
   },
   "dependencies": {
     "next": "15.2.4",
@@ -20,19 +22,26 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@next/eslint-plugin-next": "^15.2.4",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^22.13.13",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.23.0",
     "eslint-config-next": "15.2.4",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "typescript": "^5.8.2"
+    "jsdom": "^26.0.0",
+    "typescript": "^5.8.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.1.1"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
       "sharp"
     ],
     "onlyBuiltDependencies": [
+      "esbuild",
       "inotify"
     ]
   }
