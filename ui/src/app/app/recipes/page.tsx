@@ -1,7 +1,8 @@
 import Pagination from "./_components/Pagination/Pagination";
 import RecipeItem from "./_components/RecipeItem";
 import { getRecipes } from "./_lib/actions";
-import { RecipesListProps } from "./page.types";
+
+import type { RecipesListProps } from "./page.types";
 
 const Page: RecipesListProps = async ({ searchParams }) => {
   const { data, error } = await getRecipes(searchParams);

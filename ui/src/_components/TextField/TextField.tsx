@@ -1,16 +1,21 @@
-import type { FC } from "react";
-import type { InputProps } from "./Input.types";
-import styles from "./Input.module.css";
+import FieldError from "../FieldError";
 
-const Input: FC<InputProps> = ({
-  type = "text",
-  id,
-  placeholder,
-  name,
+import styles from "./TextField.module.css";
+
+import type { FC } from "react";
+import type { TextFieldProps } from "./TextField.types";
+
+const TextField: FC<TextFieldProps> = ({
   defaultValue,
+  error,
+  id,
   label,
+  name = "",
+  placeholder,
   testId = "Input",
-  onChange,
+  type = "text",
+  required,
+  register,
 }) => {
   return (
     <div className={styles.wrapper} data-testid={testId}>
@@ -26,13 +31,14 @@ const Input: FC<InputProps> = ({
         className={styles.input}
         type={type}
         id={id}
-        name={name}
-        {...(onChange && { onChange })}
+        {...(required && { required: true })}
+        {...(register && { ...register(name) })}
         {...(placeholder && { placeholder })}
         {...(defaultValue && { defaultValue })}
       />
+      <FieldError error={error} testId={`${testId}-error`} />
     </div>
   );
 };
 
-export { Input };
+export default TextField;

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+
 import RegisterForm from "./_components/RegisterForm";
 
 const Page = () => {

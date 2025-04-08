@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import type { FC } from "react";
 import type { RecipeItemProps } from "./RecipeItem.types";
-import Link from "next/link";
 
 const RecipeItem: FC<RecipeItemProps> = ({ recipe }) => {
   return (

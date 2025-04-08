@@ -1,7 +1,11 @@
+import PaginationLink from "../PaginationLink";
+
+import { getLinksAfter, getLinksBefore } from "./utils";
+
 import type { FC } from "react";
 import type { PaginationProps } from "./Pagination.types";
-import PaginationLink from "../PaginationLink";
-import { getLinksAfter, getLinksBefore } from "./utils";
+
+
 
 const Pagination: FC<PaginationProps> = ({ metadata }) => {
   const { last_page, first_page, current_page } = metadata;

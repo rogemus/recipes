@@ -1,26 +1,32 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`@component/Input > renders component correctly 1`] = `
+exports[`@component/TextField > renders component correctly 1`] = `
 <div>
   <div
-    class="_wrapper_838bd5"
+    class="_wrapper_ec2ce5"
     data-testid="Input"
   >
     <label
-      class="_label_838bd5"
+      class="_label_ec2ce5"
       data-testid="Input-label"
       for="test-id"
     >
       test-label
     </label>
     <input
-      class="_input_838bd5"
+      class="_input_ec2ce5"
       data-testid="Input-input"
       id="test-id"
-      name="test-name"
       placeholder="Test placeholder"
       type="text"
     />
+    <div
+      data-testid="Input-error"
+    >
+      <p>
+        Test error
+      </p>
+    </div>
   </div>
 </div>
 `;

@@ -1,6 +1,6 @@
 "use server";
 
-import { IngredientListItem, Recipe } from "@/_models";
+import type { IngredientListItem, Recipe } from "@/_models";
 
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/recipes`;

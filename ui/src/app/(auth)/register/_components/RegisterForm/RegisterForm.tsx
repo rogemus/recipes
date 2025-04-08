@@ -1,11 +1,14 @@
 "use client";
 
 import { useActionState } from "react";
-import { register } from "../../_lib/actions";
-import { RegisterFormInputs } from "./RegisterForm.types";
-import { FormState } from "@/_models/FormState";
-import FormErrors from "@/_components/FormErrors";
 import { z } from "zod";
+
+import { register } from "../../_lib/actions";
+
+import type { RegisterFormInputs } from "./RegisterForm.types";
+import type { FormState } from "@/_models/FormState";
+
+import FormErrors from "@/_components/FormErrors";
 
 const initialState: FormState<RegisterFormInputs> = {
   fieldErrors: new z.ZodError<RegisterFormInputs>([]).format(),

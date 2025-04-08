@@ -1,5 +1,6 @@
-import { RecipeDetailsPageProps } from "./page.types";
 import { getRecipeDetails } from "./_lib/actions";
+
+import type { RecipeDetailsPageProps } from "./page.types";
 
 const Page: RecipeDetailsPageProps = async ({ params }) => {
   const queryParams = await params;

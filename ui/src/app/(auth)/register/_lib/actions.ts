@@ -1,10 +1,14 @@
 "use server";
 
-import { User } from "@/_models";
-import { FormState, toZodError } from "@/_models/FormState";
-import { RegisterFormInputs } from "../_components/RegisterForm/RegisterForm.types";
-
 import { z } from "zod";
+
+import { toZodError } from "@/_models/FormState";
+
+import type { RegisterFormInputs } from "../_components/RegisterForm/RegisterForm.types";
+import type { User } from "@/_models";
+import type { FormState} from "@/_models/FormState";
+
+
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/users`;
 

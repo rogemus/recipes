@@ -1,11 +1,19 @@
 "use client";
 
-import { useActionState } from "react";
-import { login } from "../../_lib/actions";
 import { z } from "zod";
-import { FormState } from "@/_models/FormState";
-import { LoginFormInputs } from "./LoginForm.types";
-import FormErrors from "@/_components/FormErrors/FormErrors";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useActionState } from "react";
+
+import TextField from "@/_components/TextField";
+
+import { login } from "../../_lib/actions";
+
+import { LoginFormSchema } from "./LoginForm.schema";
+
+import type { LoginFormInputs } from "./LoginForm.types";
+import type { FormState } from "@/_models/FormState";
+
 
 const initialState: FormState<LoginFormInputs> = {
   fieldErrors: new z.ZodError<LoginFormInputs>([]).format(),
@@ -13,34 +21,48 @@ const initialState: FormState<LoginFormInputs> = {
 };
 
 const LoginForm = () => {
-  const [state, formAction, pending] = useActionState(login, initialState);
+  const {
+    register,
+    formState: { isValid, errors },
+  } = useForm({
+    mode: "all",
+    resolver: zodResolver(LoginFormSchema),
+  });
+  const [_, formAction] = useActionState<FormState<LoginFormInputs>, FormData>(
+    login,
+    initialState,
+  );
 
   return (
     <>
       <form action={formAction} method="POST">
         <div>
-          <label>Email</label>
-          <input
+          <TextField
             type="email"
             id="email"
             placeholder="Email..."
-            name="email"
+            label="Email"
             defaultValue={"tom@example.com"}
+            name="email"
+            register={register}
+            required
+            error={errors?.email?.message as string}
           />
-          <FormErrors errors={state?.fieldErrors.email?._errors} />
         </div>
         <div>
-          <label>Password</label>
-          <input
+          <TextField
+            label="Password"
             type="password"
             id="password"
             placeholder="Password..."
             name="password"
             defaultValue="pa55word"
+            register={register}
+            required
+            error={errors?.password?.message as string}
           />
-          <FormErrors errors={state?.fieldErrors.password?._errors} />
         </div>
-        <button disabled={pending} type="submit">
+        <button type="submit" disabled={!isValid}>
           Login
         </button>
       </form>

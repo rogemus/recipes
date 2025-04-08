@@ -1,4 +1,4 @@
-import { Page } from "@/app/_models";
+import type { Page } from "@/app/_models";
 
 type QueryParams = {
   id: string;

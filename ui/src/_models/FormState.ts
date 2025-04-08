@@ -1,4 +1,6 @@
-import { ZodFormattedError, ZodIssue, ZodIssueCode } from "zod";
+import { ZodIssueCode } from "zod";
+
+import type { ZodFormattedError, ZodIssue} from "zod";
 
 export type FormState<T> = {
   fieldErrors: ZodFormattedError<T>;

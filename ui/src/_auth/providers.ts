@@ -1,6 +1,7 @@
-import { Token } from "@/_models";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+
+import type { Token } from "@/_models";
 
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/tokens/authentication`;

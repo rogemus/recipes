@@ -1,14 +1,11 @@
-import { Input } from "./Input";
+import TextField from "./TextField";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { fn } from "@storybook/test";
-
-const meta: Meta<typeof Input> = {
-  component: Input,
-  title: "Input",
+const meta: Meta<typeof TextField> = {
+  component: TextField,
+  title: "Form/TextField",
   args: {
-    onChange: fn,
     id: "id",
     name: "Email",
     type: "email",
@@ -19,6 +16,6 @@ const meta: Meta<typeof Input> = {
 
 export default meta;
 
-type Story = StoryObj<typeof Input>;
+type Story = StoryObj<typeof TextField>;
 
 export const Default: Story = {};

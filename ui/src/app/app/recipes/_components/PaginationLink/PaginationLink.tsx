@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import type { FC } from "react";
 import type { PaginationLinkProps } from "./PaginationLink.types";
-import Link from "next/link";
 
 const PaginationLink: FC<PaginationLinkProps> = ({
   disabled,
