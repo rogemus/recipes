@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`@component/Input > renders component correctly 1`] = `
+<div>
+  <div
+    class="_wrapper_838bd5"
+    data-testid="Input"
+  >
+    <label
+      class="_label_838bd5"
+      data-testid="Input-label"
+      for="test-id"
+    >
+      test-label
+    </label>
+    <input
+      class="_input_838bd5"
+      data-testid="Input-input"
+      id="test-id"
+      name="test-name"
+      placeholder="Test placeholder"
+      type="text"
+    />
+  </div>
+</div>
+`;
