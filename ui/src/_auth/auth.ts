@@ -4,7 +4,8 @@ import { emailProvider } from "./providers";
 
 import type { DefaultSession } from "next-auth";
 import type { Token as AppToken } from "@/_models";
-
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
 declare module "next-auth" {
   interface Session {
@@ -28,7 +29,7 @@ export const { auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
+    authorized({ auth, request: { nextUrl, url } }) {
       const isLoggedIn = !!auth?.user;
       const isProtected = nextUrl.pathname.startsWith("/app");
 
@@ -39,7 +40,7 @@ export const { auth, signIn, signOut } = NextAuth({
 
         return false;
       } else if (isLoggedIn) {
-        return Response.redirect(new URL("/app/dashboard", nextUrl));
+        return NextResponse.redirect(new URL("/app/dashboard", url));
       }
 
       return true;
