@@ -1,21 +1,14 @@
 "use server";
 
-import type { Metadata, Recipe, SearchParams } from "@/_models";
+import type { AutocompleteRecipesResponse, RecipesResponse } from "./actions.types";
+import type { SearchParams } from "@/_models";
 
 const BASE_API_PATH = process.env.API_PATH;
-const API_PATH = `${BASE_API_PATH}/v1/recipes`;
-
-type RecipesResponse = {
-  data?: {
-    recipes: Recipe[];
-    metadata: Metadata;
-  };
-  error: string;
-};
 
 export const getRecipes = async (
   searchParams: SearchParams,
 ): Promise<RecipesResponse> => {
+  const API_PATH = `${BASE_API_PATH}/v1/recipes`;
   const urlParams = new URLSearchParams();
 
   try {
@@ -35,6 +28,27 @@ export const getRecipes = async (
   try {
     const response = await fetch(url);
     const json = (await response.json()) as RecipesResponse;
+    return json;
+  } catch (e) {
+    const msg = "Error: Unable to fetch recipes";
+    console.error(msg, e);
+    return { error: msg };
+  }
+};
+
+export const getAutocompleteRecipes = async (
+  query: string,
+): Promise<AutocompleteRecipesResponse> => {
+  const API_PATH = `${BASE_API_PATH}/v1/recipes`;
+  // TODO: implemnent API on be
+  // const API_PATH = `${BASE_API_PATH}/v1/recipes/autocomplete`;
+
+  try {
+    const url = `${API_PATH}?title=${query}&page_size=5`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    const json = (await response.json()) as AutocompleteRecipesResponse;
     return json;
   } catch (e) {
     const msg = "Error: Unable to fetch recipes";

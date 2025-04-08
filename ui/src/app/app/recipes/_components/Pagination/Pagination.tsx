@@ -5,8 +5,6 @@ import { getLinksAfter, getLinksBefore } from "./utils";
 import type { FC } from "react";
 import type { PaginationProps } from "./Pagination.types";
 
-
-
 const Pagination: FC<PaginationProps> = ({ metadata }) => {
   const { last_page, first_page, current_page } = metadata;
 
@@ -17,7 +15,6 @@ const Pagination: FC<PaginationProps> = ({ metadata }) => {
     <ul>
       {current_page !== first_page && (
         <li>
-          {" "}
           <PaginationLink label="1" pageNumber={1} />
         </li>
       )}

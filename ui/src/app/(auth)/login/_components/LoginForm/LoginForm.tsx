@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useActionState } from "react";
 
 import TextField from "@/_components/TextField";
+import { Button } from "@/_components/Button";
 
 import { login } from "../../_lib/actions";
 
@@ -13,7 +14,6 @@ import { LoginFormSchema } from "./LoginForm.schema";
 
 import type { LoginFormInputs } from "./LoginForm.types";
 import type { FormState } from "@/_models/FormState";
-import { Button } from "@/_components/Button";
 
 const initialState: FormState<LoginFormInputs> = {
   fieldErrors: new z.ZodError<LoginFormInputs>([]).format(),

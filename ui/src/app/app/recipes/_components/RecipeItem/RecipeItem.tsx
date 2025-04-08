@@ -6,7 +6,7 @@ import type { RecipeItemProps } from "./RecipeItem.types";
 const RecipeItem: FC<RecipeItemProps> = ({ recipe }) => {
   return (
     <li>
-      <Link href={`/recipes/${recipe.id}`}> {recipe.title}</Link>
+      <Link href={`/app/recipes/${recipe.id}`}> {recipe.title}</Link>
       <p>{recipe.description}</p>
     </li>
   );

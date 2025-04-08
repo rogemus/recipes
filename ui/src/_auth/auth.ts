@@ -1,11 +1,10 @@
 import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
 
 import { emailProvider } from "./providers";
 
 import type { DefaultSession } from "next-auth";
 import type { Token as AppToken } from "@/_models";
-import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
 
 declare module "next-auth" {
   interface Session {

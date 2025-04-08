@@ -1,5 +1,5 @@
-import { Comp } from "@/_models";
-import { MouseEventHandler } from "react";
+import type { MouseEventHandler } from "react";
+import type { Comp } from "@/_models";
 
 export type ButtonProps = {
   disabled?: boolean;

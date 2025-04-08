@@ -1,5 +1,6 @@
 import Pagination from "./_components/Pagination/Pagination";
 import RecipeItem from "./_components/RecipeItem";
+import { SearchBar } from "./_components/SearchBar";
 import { getRecipes } from "./_lib/actions";
 
 import type { RecipesListProps } from "./page.types";
@@ -11,12 +12,13 @@ const Page: RecipesListProps = async ({ searchParams }) => {
   // TODO: handle error
   // TODO: handle no data
   if (typeof data === "undefined") {
-    return <div> No data </div>;
+    return <div>No data</div>;
   }
 
   return (
     <>
       <h1>Recipes List</h1>
+      <SearchBar />
       <ul>
         {data.recipes.map((recipe) => (
           <RecipeItem key={`recipe-${recipe.id}`} recipe={recipe} />

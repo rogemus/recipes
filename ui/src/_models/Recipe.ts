@@ -8,3 +8,8 @@ export type Recipe = {
   user_id: number;
   user_name: string;
 };
+
+export type RecipeSimple = {
+  id: number;
+  title: string;
+};
