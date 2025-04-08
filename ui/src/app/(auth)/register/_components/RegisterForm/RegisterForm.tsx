@@ -13,6 +13,7 @@ import { RegisterFormSchema } from "./RegisterForm.schema";
 
 import type { RegisterFormInputs } from "./RegisterForm.types";
 import type { FormState } from "@/_models/FormState";
+import { Button } from "@/_components/Button";
 
 const initialState: FormState<RegisterFormInputs> = {
   fieldErrors: new z.ZodError<RegisterFormInputs>([]).format(),
@@ -76,9 +77,12 @@ const RegisterForm = () => {
             error={errors?.password?.message as string}
           />
         </div>
-        <button disabled={!isValid} type="submit">
-          Login
-        </button>
+        <Button
+          disabled={!isValid}
+          testId="BtnSubmit"
+          label="Register"
+          type="submit"
+        />
       </form>
     </>
   );

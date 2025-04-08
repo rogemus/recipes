@@ -13,6 +13,7 @@ import { LoginFormSchema } from "./LoginForm.schema";
 
 import type { LoginFormInputs } from "./LoginForm.types";
 import type { FormState } from "@/_models/FormState";
+import { Button } from "@/_components/Button";
 
 const initialState: FormState<LoginFormInputs> = {
   fieldErrors: new z.ZodError<LoginFormInputs>([]).format(),
@@ -61,9 +62,12 @@ const LoginForm = () => {
             error={errors?.password?.message as string}
           />
         </div>
-        <button type="submit" data-testid="FormSubmit" disabled={!isValid}>
-          Login
-        </button>
+        <Button
+          label="Login"
+          type="submit"
+          testId="FormSubmit"
+          disabled={!isValid}
+        />
       </form>
     </>
   );

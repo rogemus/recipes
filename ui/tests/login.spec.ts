@@ -8,8 +8,8 @@ test("looks ok", async ({ page }) => {
 
 test("user is able to login", async ({ page }) => {
   await page.goto("./login");
-
   await expect(page).toHaveTitle(/Login/);
+
   const email = page.getByTestId("EmailField-input");
   const password = page.getByTestId("PasswordField-input");
   const btn = page.getByTestId("FormSubmit");

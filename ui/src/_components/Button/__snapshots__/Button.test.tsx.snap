@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`@component/Button > renders component correctly 1`] = `
+<div>
+  <button
+    class="_button_f0af68"
+    data-testid="Button"
+    type="button"
+  >
+    Test label
+  </button>
+</div>
+`;
+
+exports[`@component/Button > renders disabled component correctly 1`] = `
+<div>
+  <button
+    class="_button_f0af68"
+    data-testid="Button"
+    disabled=""
+    type="button"
+  >
+    Test label
+  </button>
+</div>
+`;
