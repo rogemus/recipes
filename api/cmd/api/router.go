@@ -22,6 +22,8 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/api/v1/users", app.registerUserHandler)
 	router.HandlerFunc(http.MethodPut, "/api/v1/users/activated", app.activateUserHandler)
 
+	router.HandlerFunc(http.MethodGet, "/api/v1/search/recipes", app.searchRecipeHandler)
+
 	router.HandlerFunc(http.MethodPost, "/api/v1/tokens/authentication", app.createAuthenticationTokenHandler)
 
 	return app.recoverPanic(app.logRequest(app.authenticate(router)))

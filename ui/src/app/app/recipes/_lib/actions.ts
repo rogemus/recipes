@@ -1,6 +1,9 @@
 "use server";
 
-import type { AutocompleteRecipesResponse, RecipesResponse } from "./actions.types";
+import type {
+  AutocompleteRecipesResponse,
+  RecipesResponse,
+} from "./actions.types";
 import type { SearchParams } from "@/_models";
 
 const BASE_API_PATH = process.env.API_PATH;
@@ -39,9 +42,7 @@ export const getRecipes = async (
 export const getAutocompleteRecipes = async (
   query: string,
 ): Promise<AutocompleteRecipesResponse> => {
-  const API_PATH = `${BASE_API_PATH}/v1/recipes`;
-  // TODO: implemnent API on be
-  // const API_PATH = `${BASE_API_PATH}/v1/recipes/autocomplete`;
+  const API_PATH = `${BASE_API_PATH}/v1/search/recipes`;
 
   try {
     const url = `${API_PATH}?title=${query}&page_size=5`;

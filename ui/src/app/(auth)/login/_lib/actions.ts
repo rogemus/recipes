@@ -6,9 +6,8 @@ import { signIn } from "@/_auth";
 
 import { LoginFormSchema } from "../_components/LoginForm";
 
-import type { LoginFormInputs} from "../_components/LoginForm";
+import type { LoginFormInputs } from "../_components/LoginForm";
 import type { FormState } from "@/_models/FormState";
-
 
 export const login = async (_: unknown, formData: FormData) => {
   const { error } = LoginFormSchema.safeParse({

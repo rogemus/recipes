@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`@component/SearchBar > renders component correctly 1`] = `
+<div>
+  <div
+    data-testid="SearchBar"
+  >
+    <div>
+      <label>
+        Search recipe
+      </label>
+      <input
+        data-testid="SearchBar-input"
+        placeholder="Search recipe..."
+        type="text"
+      />
+    </div>
+  </div>
+</div>
+`;

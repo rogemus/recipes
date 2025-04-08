@@ -18,7 +18,7 @@ const SearchBar: FC<SearchBarProps> = ({ testId = "SearchBar" }) => {
       if (response.data) {
         setResults(response.data.recipes);
       }
-    } catch (e) {
+    } catch {
       setResults([]);
       console.log("ERROR: cannot fetch recipes");
     }

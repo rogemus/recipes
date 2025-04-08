@@ -6,25 +6,12 @@ import { toZodError } from "@/_models/FormState";
 
 import { RegisterFormSchema } from "../_components/RegisterForm";
 
+import type { SignUpResponse } from "./actions.types";
 import type { RegisterFormInputs } from "../_components/RegisterForm/RegisterForm.types";
-import type { User } from "@/_models";
 import type { FormState } from "@/_models/FormState";
 
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/users`;
-
-type SignUpResponse = {
-  data?: {
-    user: User;
-  };
-  error?:
-    | string
-    | {
-        email: string;
-        password: string;
-        name: string;
-      };
-};
 
 export const signUp = async (
   email: string,

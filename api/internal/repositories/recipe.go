@@ -174,3 +174,47 @@ func (r RecipeRepo) List(title string, filters models.Filters) ([]*models.Recipe
 
 	return recipes, metadata, nil
 }
+
+func (r RecipeRepo) ListSimple(title string) ([]*models.RecipeSimple, error) {
+	query := `
+    SELECT
+      id,
+      title
+    FROM
+      recipes
+    WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
+    ORDER BY title ASC, id ASC
+    LIMIT 5;`
+
+	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
+	defer cancel()
+
+	args := []any{title}
+	rows, err := r.DB.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	recipes := []*models.RecipeSimple{}
+
+	for rows.Next() {
+		var recipe models.RecipeSimple
+
+		err := rows.Scan(
+			&recipe.ID,
+			&recipe.Title,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		recipes = append(recipes, &recipe)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return recipes, nil
+}
