@@ -14,7 +14,6 @@ import { LoginFormSchema } from "./LoginForm.schema";
 import type { LoginFormInputs } from "./LoginForm.types";
 import type { FormState } from "@/_models/FormState";
 
-
 const initialState: FormState<LoginFormInputs> = {
   fieldErrors: new z.ZodError<LoginFormInputs>([]).format(),
   formErrors: [],
@@ -24,11 +23,11 @@ const LoginForm = () => {
   const {
     register,
     formState: { isValid, errors },
-  } = useForm({
+  } = useForm<LoginFormInputs>({
     mode: "all",
     resolver: zodResolver(LoginFormSchema),
   });
-  const [_, formAction] = useActionState<FormState<LoginFormInputs>, FormData>(
+  const [, formAction] = useActionState<FormState<LoginFormInputs>, FormData>(
     login,
     initialState,
   );
@@ -38,31 +37,31 @@ const LoginForm = () => {
       <form action={formAction} method="POST">
         <div>
           <TextField
+            {...register("email")}
             type="email"
             id="email"
             placeholder="Email..."
             label="Email"
-            defaultValue={"tom@example.com"}
-            name="email"
-            register={register}
+            // defaultValue={"tom@example.com"}
+            testId="EmailField"
             required
             error={errors?.email?.message as string}
           />
         </div>
         <div>
           <TextField
+            {...register("password")}
             label="Password"
             type="password"
             id="password"
             placeholder="Password..."
-            name="password"
-            defaultValue="pa55word"
-            register={register}
+            // defaultValue="pa55word"
+            testId="PasswordField"
             required
             error={errors?.password?.message as string}
           />
         </div>
-        <button type="submit" disabled={!isValid}>
+        <button type="submit" data-testid="FormSubmit" disabled={!isValid}>
           Login
         </button>
       </form>

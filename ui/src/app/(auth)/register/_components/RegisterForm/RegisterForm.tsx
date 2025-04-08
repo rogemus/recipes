@@ -1,14 +1,18 @@
 "use client";
 
-import { useActionState } from "react";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useActionState } from "react";
 
-import { register } from "../../_lib/actions";
+import TextField from "@/_components/TextField";
+
+import { register as registerUser } from "../../_lib/actions";
+
+import { RegisterFormSchema } from "./RegisterForm.schema";
 
 import type { RegisterFormInputs } from "./RegisterForm.types";
 import type { FormState } from "@/_models/FormState";
-
-import FormErrors from "@/_components/FormErrors";
 
 const initialState: FormState<RegisterFormInputs> = {
   fieldErrors: new z.ZodError<RegisterFormInputs>([]).format(),
@@ -16,48 +20,63 @@ const initialState: FormState<RegisterFormInputs> = {
 };
 
 const RegisterForm = () => {
-  const [state, formAction, pending] = useActionState(register, initialState);
+  const {
+    register,
+    formState: { isValid, errors },
+  } = useForm<RegisterFormInputs>({
+    mode: "all",
+    resolver: zodResolver(RegisterFormSchema),
+  });
+  const [, formAction] = useActionState<
+    FormState<RegisterFormInputs>,
+    FormData
+  >(registerUser, initialState);
 
   return (
     <>
       <form action={formAction} method="POST">
         <div>
           <label>Name</label>
-          <input
+          <TextField
+            {...register("name")}
+            // defaultValue={"tom@example.com"}
+            testId="UserField"
             required
-            type="text"
             id="name"
             placeholder="Name..."
             name="name"
             defaultValue={"Tom"}
+            label="Name"
+            error={errors?.name?.message as string}
           />
-          <FormErrors errors={state?.fieldErrors.name?._errors} />
         </div>
         <div>
-          <label>Email</label>
-          <input
-            required
+          <TextField
+            {...register("email")}
             type="email"
             id="email"
             placeholder="Email..."
-            name="email"
-            defaultValue={"tom@example.com"}
+            label="Email"
+            // defaultValue={"tom@example.com"}
+            testId="EmailField"
+            required
+            error={errors?.email?.message as string}
           />
-          <FormErrors errors={state?.fieldErrors.email?._errors} />
         </div>
         <div>
-          <label>Password</label>
-          <input
-            required
+          <TextField
+            {...register("password")}
+            label="Password"
             type="password"
             id="password"
             placeholder="Password..."
-            name="password"
-            defaultValue="pa55word"
+            // defaultValue="pa55word"
+            testId="PasswordField"
+            required
+            error={errors?.password?.message as string}
           />
-          <FormErrors errors={state?.fieldErrors.password?._errors} />
         </div>
-        <button disabled={pending} type="submit">
+        <button disabled={!isValid} type="submit">
           Login
         </button>
       </form>

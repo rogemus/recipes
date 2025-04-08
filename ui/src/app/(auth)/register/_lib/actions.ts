@@ -4,10 +4,11 @@ import { z } from "zod";
 
 import { toZodError } from "@/_models/FormState";
 
+import { RegisterFormSchema } from "../_components/RegisterForm";
+
 import type { RegisterFormInputs } from "../_components/RegisterForm/RegisterForm.types";
 import type { User } from "@/_models";
-import type { FormState} from "@/_models/FormState";
-
+import type { FormState } from "@/_models/FormState";
 
 const BASE_API_PATH = process.env.API_PATH;
 const API_PATH = `${BASE_API_PATH}/v1/users`;
@@ -48,29 +49,6 @@ export const signUp = async (
     return { error: msg };
   }
 };
-
-const RegisterFormSchema = z.object({
-  name: z
-    .string({ required_error: "Name is required" })
-    .min(5, {
-      message: "Must be 5 or more characters long",
-    })
-    .max(20, { message: "Must be 20 or fewer characters long" }),
-  email: z
-    .string({ required_error: "Email is required" })
-    .email({ message: "Invalid email address" }),
-  // TODO validate special char
-  password: z
-    .string({
-      required_error: "Password is required",
-    })
-    .min(8, {
-      message: "Must be 8 or more characters long",
-    })
-    .max(32, {
-      message: "Must be 5 or fewer characters long",
-    }),
-});
 
 export async function register(_: unknown, formData: FormData) {
   const { error } = RegisterFormSchema.safeParse({
@@ -113,6 +91,9 @@ export async function register(_: unknown, formData: FormData) {
       formErrors: [],
     };
   } catch {
-    return { FormErrors: ["Something went wrong"] };
+    return {
+      fieldErrors: new z.ZodError<RegisterFormInputs>([]).format(),
+      formErrors: ["Something went wrong"],
+    };
   }
 }

@@ -25,12 +25,21 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: "http://127.0.0.1:7676",
+    baseURL: "http://127.0.0.1:3000",
     trace: "on-first-retry",
   },
 
   snapshotPathTemplate:
     "tests/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}",
+  expect: {
+    toHaveScreenshot: {
+      pathTemplate:
+        "tests/__screenshots__{/projectName}/{testFilePath}/{arg}{ext}",
+    },
+    toMatchAriaSnapshot: {
+      pathTemplate: "tests/__snapshots__/{testFilePath}/{arg}{ext}",
+    },
+  },
 
   /* Configure projects for major browsers */
   projects: [
@@ -40,8 +49,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "pnpm run dev",
-    url: "http://localhost:7676",
+    command: "pnpm start",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
 });

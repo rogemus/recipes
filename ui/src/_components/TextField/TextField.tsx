@@ -1,8 +1,9 @@
+import { type FC } from "react";
+
 import FieldError from "../FieldError";
 
 import styles from "./TextField.module.css";
 
-import type { FC } from "react";
 import type { TextFieldProps } from "./TextField.types";
 
 const TextField: FC<TextFieldProps> = ({
@@ -15,7 +16,9 @@ const TextField: FC<TextFieldProps> = ({
   testId = "Input",
   type = "text",
   required,
-  register,
+  ref,
+  onChange,
+  onBlur,
 }) => {
   return (
     <div className={styles.wrapper} data-testid={testId}>
@@ -31,8 +34,11 @@ const TextField: FC<TextFieldProps> = ({
         className={styles.input}
         type={type}
         id={id}
+        name={name}
+        {...(ref && { ref })}
+        {...(onChange && { onChange })}
+        {...(onBlur && { onBlur })}
         {...(required && { required: true })}
-        {...(register && { ...register(name) })}
         {...(placeholder && { placeholder })}
         {...(defaultValue && { defaultValue })}
       />

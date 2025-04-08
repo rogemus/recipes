@@ -31,6 +31,7 @@ const eslintConfig = [
         },
       ],
       "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-empty-object-type": "off",
     },
   },
 ];

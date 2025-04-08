@@ -1,10 +1,14 @@
-import { FieldValues } from "react-hook-form";
-
-import type { UseFormRegister } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
+import type {
+  ChangeHandler,
+  RefCallBack,
+  UseFormRegister,
+} from "react-hook-form";
 import type { Comp } from "@/_models";
 
 export type TextFieldProps = {
   defaultValue?: string;
+  disabled?: boolean;
   error?: string;
   id: string;
   label: string;
@@ -12,5 +16,8 @@ export type TextFieldProps = {
   placeholder?: HTMLInputElement["placeholder"];
   required?: boolean;
   type?: HTMLInputElement["type"];
-  register?: UseFormRegister<Record<string, string>>;
+  register?: UseFormRegister<FieldValues>;
+  onChange?: ChangeHandler;
+  onBlur?: ChangeHandler;
+  ref?: RefCallBack;
 } & Comp;

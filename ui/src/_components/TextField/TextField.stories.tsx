@@ -1,3 +1,5 @@
+import { fn } from "@storybook/test";
+
 import TextField from "./TextField";
 
 import type { Meta, StoryObj } from "@storybook/react";
@@ -11,6 +13,8 @@ const meta: Meta<typeof TextField> = {
     type: "email",
     label: "Email",
     placeholder: "Email ...",
+    onBlur: fn(),
+    onChange: fn(),
   },
 };
 
