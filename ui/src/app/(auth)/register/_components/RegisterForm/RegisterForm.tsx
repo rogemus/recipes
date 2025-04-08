@@ -2,22 +2,18 @@
 
 import { useActionState } from "react";
 import { register } from "../../_lib/actions";
+import { RegisterFormInputs } from "./RegisterForm.types";
+import { FormState } from "@/_models/FormState";
+import FormErrors from "@/_components/FormErrors";
+import { z } from "zod";
 
-const initialState = {
-  error: {
-    email: "",
-    name: "",
-    password: "",
-  },
+const initialState: FormState<RegisterFormInputs> = {
+  fieldErrors: new z.ZodError<RegisterFormInputs>([]).format(),
+  formErrors: [],
 };
 
 const RegisterForm = () => {
   const [state, formAction, pending] = useActionState(register, initialState);
-
-  // TODO: handle this case
-  if (typeof state?.error === "string") {
-    return null;
-  }
 
   return (
     <>
@@ -32,7 +28,7 @@ const RegisterForm = () => {
             name="name"
             defaultValue={"Tom"}
           />
-          {state?.error?.email && <p>{state?.error?.email}</p>}
+          <FormErrors errors={state?.fieldErrors.name?._errors} />
         </div>
         <div>
           <label>Email</label>
@@ -44,7 +40,7 @@ const RegisterForm = () => {
             name="email"
             defaultValue={"tom@example.com"}
           />
-          {state?.error?.email && <p>{state?.error?.email}</p>}
+          <FormErrors errors={state?.fieldErrors.email?._errors} />
         </div>
         <div>
           <label>Password</label>
@@ -56,8 +52,7 @@ const RegisterForm = () => {
             name="password"
             defaultValue="pa55word"
           />
-
-          {state?.error?.password && <p>{state?.error?.password}</p>}
+          <FormErrors errors={state?.fieldErrors.password?._errors} />
         </div>
         <button disabled={pending} type="submit">
           Login

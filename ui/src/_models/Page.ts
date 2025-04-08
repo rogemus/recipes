@@ -5,7 +5,7 @@ export type SearchParams = Promise<{
 }>;
 
 // NOTE: Next.js Page
-export type Page<Params extends Record<string, string> = {}> = NextPage<{
+export type Page<Params extends Record<string, string>> = NextPage<{
   params: Promise<Params>;
   searchParams: SearchParams;
 }>;

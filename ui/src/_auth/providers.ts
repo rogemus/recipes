@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
 const BASE_API_PATH = process.env.API_PATH;
-const API_PATH = `${BASE_API_PATH}/api/v1/tokens/authentication`;
+const API_PATH = `${BASE_API_PATH}/v1/tokens/authentication`;
 
 type SignInResponse = {
   data?: {
@@ -67,8 +67,6 @@ export const emailProvider = Credentials({
             ...res.data.authentication_token,
           },
         };
-
-        console.log("\n\n", user, "\n\n");
 
         return user;
       }

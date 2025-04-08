@@ -1,6 +1,5 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import { emailProvider } from "./providers";
-import { authConfig } from "./auth.config";
 import { Token as AppToken } from "@/_models";
 
 declare module "next-auth" {
@@ -21,7 +20,37 @@ declare module "next-auth" {
 }
 
 export const { auth, signIn, signOut } = NextAuth({
-  ...authConfig,
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isProtected = nextUrl.pathname.startsWith("/app");
 
+      if (isProtected) {
+        if (isLoggedIn) {
+          return true;
+        }
+
+        return false;
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/app/dashboard", nextUrl));
+      }
+
+      return true;
+    },
+    jwt({ token, user }) {
+      if (user) {
+        token.api_token = user.authentication_token.token;
+      }
+
+      return token;
+    },
+    session({ session, token }) {
+      session.user.api_token = token.api_token as string;
+      return session;
+    },
+  },
   providers: [emailProvider],
 });
