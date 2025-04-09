@@ -3,7 +3,7 @@
 import type {
   GetIngredientsSearchResponnse,
   GetUnitsResponse,
-} from "./actions.types";
+} from "./recipe-create.actions.types";
 
 const BASE_API_PATH = process.env.API_PATH;
 

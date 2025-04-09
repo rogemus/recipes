@@ -5,10 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActionState } from "react";
 
-import TextField from "@/_components/TextField";
-import { Button } from "@/_components/Button";
-
-import { register as registerUser } from "../../_lib/actions";
+import TextField from "../TextField";
+import Button from "../Button";
+import { register as registerUser } from "../../_lib";
 
 import { RegisterFormSchema } from "./RegisterForm.schema";
 

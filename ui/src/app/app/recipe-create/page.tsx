@@ -1,5 +1,5 @@
-import IngredientSearch from "./_components/IngredientSearch";
-import { getUnits } from "./_lib";
+import { IngredientSearch } from "@/_components";
+import { getUnits } from "@/_lib";
 
 const Page = async () => {
   const units = await getUnits();

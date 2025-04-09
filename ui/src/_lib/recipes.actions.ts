@@ -3,7 +3,7 @@
 import type {
   AutocompleteRecipesResponse,
   RecipesResponse,
-} from "./actions.types";
+} from "./recipes.actions.types";
 import type { SearchParams } from "@/_models";
 
 const BASE_API_PATH = process.env.API_PATH;

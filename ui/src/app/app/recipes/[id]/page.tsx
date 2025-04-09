@@ -1,4 +1,4 @@
-import { getRecipeDetails } from "./_lib/actions";
+import { getRecipeDetails } from "@/_lib";
 
 import type { RecipeDetailsPageProps } from "./page.types";
 

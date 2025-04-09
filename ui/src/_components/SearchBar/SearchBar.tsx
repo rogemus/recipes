@@ -3,7 +3,7 @@
 import { useState, type ChangeEvent, type FC } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { getAutocompleteRecipes } from "../../_lib/actions";
+import { getAutocompleteRecipes } from "../../_lib";
 import SearchResults from "../SearchResults";
 
 import type { RecipeSimple } from "@/_models";

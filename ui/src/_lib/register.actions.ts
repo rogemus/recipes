@@ -6,7 +6,7 @@ import { toZodError } from "@/_models/FormState";
 
 import { RegisterFormSchema } from "../_components/RegisterForm";
 
-import type { SignUpResponse } from "./actions.types";
+import type { SignUpResponse } from "./register.actions.types";
 import type { RegisterFormInputs } from "../_components/RegisterForm/RegisterForm.types";
 import type { FormState } from "@/_models/FormState";
 

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import RegisterForm from "./_components/RegisterForm";
+import { RegisterForm } from "@/_components";
 
 import type { Metadata } from "next";
 

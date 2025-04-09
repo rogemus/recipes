@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`@component/IngredientSearchResults > renders component correctly 1`] = `
+<div>
+  <ul
+    data-testid="IngredientSearchResults"
+  >
+    <li>
+      test ingredient
+    </li>
+  </ul>
+</div>
+`;

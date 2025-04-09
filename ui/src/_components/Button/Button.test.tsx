@@ -1,7 +1,7 @@
 import { expect, test, describe, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { Button } from "./Button";
+import Button from "./Button";
 
 import type { ButtonProps } from "./Button.types";
 

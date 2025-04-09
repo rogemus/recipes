@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import LoginForm from "./_components/LoginForm";
+import { LoginForm } from "@/_components";
 
 import type { Metadata } from "next";
 
