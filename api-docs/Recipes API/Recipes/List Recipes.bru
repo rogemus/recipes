@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{BASE_URL}}/api/v1/recipes?page=1&sort=-id&page_size=3
+  url: {{BASE_URL}}/api/v1/recipes?page_size=5&title=Incididunt
   body: none
   auth: inherit
 }
 
 params:query {
-  page: 1
-  sort: -id
-  page_size: 3
-  ~title: Incididunt
+  page_size: 5
+  title: Incididunt
+  ~page: 1
+  ~sort: -id
 }

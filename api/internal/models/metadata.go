@@ -21,3 +21,4 @@ func CalculateMetadata(totalRecords, page, pageSize int) Metadata {
 		TotalRecords: totalRecords,
 	}
 }
+

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"recipes.krogowski.dev/internal/models"
 )
@@ -28,24 +29,28 @@ func (r *IngredientRepo) Insert(ingredientName string) (int64, error) {
 	return ingredientId, nil
 }
 
-func (m *IngredientRepo) Search(searchQuery string) ([]*models.Ingredient, error) {
-	query := `
-    SELECT id, name 
-    FROM ingredients
-    WHERE (to_tsvector('simple', name) @@ plainto_tsquery('simple', $1) OR $1 = '')
-    ORDER BY name ASC, id ASC
-    LIMIT 5;`
+func (r *IngredientRepo) Search(ingredientName string) ([]*models.IngredientSimple, error) {
+	query := fmt.Sprintf(`
+		SELECT id, name
+		FROM ingredients
+	  WHERE (to_tsvector('simple', name) @@ to_tsquery('simple', '%s:*') OR $1 = '') 
+		ORDER BY name ASC, id ASC
+		LIMIT 5;`, ingredientName)
 
-	rows, err := m.DB.Query(query, searchQuery)
+	ctx, cancel := context.WithTimeout(context.Background(), DBRequestTimeout)
+	defer cancel()
+
+	args := []any{ingredientName}
+	rows, err := r.DB.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var ingredients []*models.Ingredient
+	var ingredients []*models.IngredientSimple
 
 	for rows.Next() {
-		var ingredient models.Ingredient
+		var ingredient models.IngredientSimple
 
 		if err = rows.Scan(&ingredient.ID, &ingredient.Name); err != nil {
 			return nil, err
