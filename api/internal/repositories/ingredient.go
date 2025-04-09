@@ -47,7 +47,7 @@ func (r *IngredientRepo) Search(ingredientName string) ([]*models.IngredientSimp
 	}
 	defer rows.Close()
 
-	var ingredients []*models.IngredientSimple
+	ingredients := make([]*models.IngredientSimple, 0)
 
 	for rows.Next() {
 		var ingredient models.IngredientSimple

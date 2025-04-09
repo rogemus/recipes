@@ -27,4 +27,4 @@ const SearchResults: FC<SearchResultsProps> = ({ recipes = [] }) => {
   );
 };
 
-export { SearchResults };
+export default SearchResults;

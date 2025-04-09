@@ -5,6 +5,11 @@ export type Ingredient = {
   version: number;
 };
 
+export type IngredientSimple = {
+  id: number;
+  name: string;
+};
+
 export type IngredientListItem = {
   ingredient_id: number;
   ingredient_name: string;

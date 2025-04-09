@@ -4,7 +4,7 @@ import { useState, type ChangeEvent, type FC } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import { getAutocompleteRecipes } from "../../_lib/actions";
-import { SearchResults } from "../SearchResults";
+import SearchResults from "../SearchResults";
 
 import type { RecipeSimple } from "@/_models";
 import type { SearchBarProps } from "./SearchBar.types";
@@ -49,4 +49,4 @@ const SearchBar: FC<SearchBarProps> = ({ testId = "SearchBar" }) => {
   );
 };
 
-export { SearchBar };
+export default SearchBar;

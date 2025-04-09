@@ -1,7 +1,7 @@
-import Pagination from "./_components/Pagination/Pagination";
+import Pagination from "./_components/Pagination";
 import RecipeItem from "./_components/RecipeItem";
-import { SearchBar } from "./_components/SearchBar";
-import { getRecipes } from "./_lib/actions";
+import SearchBar from "./_components/SearchBar";
+import { getRecipes } from "./_lib";
 
 import type { RecipesListProps } from "./page.types";
 

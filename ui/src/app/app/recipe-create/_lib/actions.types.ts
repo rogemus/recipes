@@ -1,15 +1,23 @@
+import type { IngredientSimple, Unit } from "@/_models";
+
 export type GetIngredientsResponnse = {
-  data?: {};
+  data?: {
+    ingredients: IngredientSimple[];
+  };
   error?: string;
 };
 
 export type GetUnitsResponse = {
-  data?: {};
+  data?: {
+    units: Unit[];
+  };
   error?: string;
 };
 
-export type CreateIngredientResponse = {
-  data?: {};
+export type GetIngredientsSearchResponnse = {
+  data?: {
+    ingredients: IngredientSimple[];
+  };
   error?: string;
 };
 
